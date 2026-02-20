@@ -8,8 +8,6 @@
     "build": "next build",
     "clean": "rm -rf .next tsconfig.tsbuildinfo",
     "rebuild": "yarn clean && yarn build",
-    "update:task": "./scripts/update-task.sh",
-    "update:task:apply": "./scripts/update-task.sh --apply",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
