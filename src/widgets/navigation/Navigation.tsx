@@ -13,7 +13,7 @@ export default function Navigation() {
   };
 
   return (
-    <aside className={`pt-7 pb-3 px-3 flex flex-col gap-y-10 h-full overflow-y-auto ${toggleMenu ? 'w-[240px]' : 'w-[60px]'} overflow-hidden`}>
+    <aside className={`p-3 flex flex-col gap-y-10 h-full overflow-y-auto ${toggleMenu ? 'w-[240px]' : 'w-[60px]'} overflow-hidden`}>
       <button
         type="button"
         className="w-9 h-9 p-2 rounded-md cursor-pointer hover:bg-gray-100"
