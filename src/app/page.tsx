@@ -1,7 +1,5 @@
-export default function Home() {
-  return (
-    <>
-      <h1>Home Component</h1>
-    </>
-  );
+import Home from '@pages/Home';
+
+export default function Page() {
+  return <Home />;
 }
