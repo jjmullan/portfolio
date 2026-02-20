@@ -26,8 +26,8 @@ export default function Navigation() {
         <nav>
           <H2 title="시작하기" isSrOnly={true} isHidden={!toggleMenu} />
           <ul className="flex flex-col">
-            <ListLink href="/" image="newpage" title="새로운 대화" isInnerLink={true} isHidden={!toggleMenu} />
-            <ListLink href="/" image="qna" title="자주 묻는 질문" isInnerLink={true} isHidden={!toggleMenu} />
+            <ListLink href="/new" image="newpage" title="새로운 대화" isInnerLink={true} isHidden={!toggleMenu} />
+            <ListLink href="/qna" image="qna" title="자주 묻는 질문" isInnerLink={true} isHidden={!toggleMenu} />
           </ul>
         </nav>
         <div hidden={!toggleMenu} className="flex flex-col gap-y-6">
