@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ko-KR">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="h-screen">
+        <div className="h-screen flex">
           <h1 className="sr-only">최영준의 포트폴리오</h1>
 
           {/* 메뉴 */}

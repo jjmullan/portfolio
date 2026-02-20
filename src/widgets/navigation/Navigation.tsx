@@ -16,7 +16,7 @@ export default function Navigation() {
     <aside className={`pt-7 pb-3 px-3 flex flex-col gap-y-10 h-full overflow-y-auto ${toggleMenu ? 'w-[240px]' : 'w-[60px]'} overflow-hidden`}>
       <button
         type="button"
-        className="px-2 cursor-pointer hover:bg-gray-100"
+        className="w-9 h-9 p-2 rounded-md cursor-pointer hover:bg-gray-100"
         onClick={toggleMenuOnOff}
         aria-expanded={toggleMenu}
         aria-controls="navigation-panel">
