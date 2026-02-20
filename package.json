@@ -7,7 +7,6 @@
     "dev": "next dev",
     "build": "next build",
     "clean": "rm -rf .next tsconfig.tsbuildinfo",
-    "rebuild": "yarn clean && yarn build",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
