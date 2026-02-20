@@ -14,7 +14,12 @@ export default function Navigation() {
 
   return (
     <aside className={`pt-7 pb-3 px-3 flex flex-col gap-y-10 h-full overflow-y-auto ${toggleMenu ? 'w-[240px]' : 'w-[60px]'} overflow-hidden`}>
-      <button type="button" className="px-2 cursor-pointer" onClick={toggleMenuOnOff} aria-expanded={toggleMenu} aria-controls="navigation-panel">
+      <button
+        type="button"
+        className="px-2 cursor-pointer hover:bg-gray-100"
+        onClick={toggleMenuOnOff}
+        aria-expanded={toggleMenu}
+        aria-controls="navigation-panel">
         <Image src={'/icons/menuonoff.svg'} alt={`메뉴 ${toggleMenu ? '닫기' : '열기'}`} width={20} height={20} />
       </button>
       <div className="flex flex-col gap-y-6">
