@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import Navigation from '@widgets/navigation/Navigation';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,7 +25,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko-KR">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className="h-screen">
+          <h1 className="sr-only">최영준의 포트폴리오</h1>
+
+          {/* 메뉴 */}
+          <Navigation />
+
+          {/* 컨텍스트 */}
+          <main className="overflow-y-scroll">{children}</main>
+        </div>
+      </body>
     </html>
   );
 }

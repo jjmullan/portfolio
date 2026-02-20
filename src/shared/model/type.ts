@@ -4,9 +4,10 @@ export type ListLinkType = {
   image?: string;
 };
 
-export type ListInnerLinkType = ListLinkType & { isInnerLink?: boolean };
+export type ListInnerLinkType = ListLinkType & { isInnerLink?: boolean; isHidden?: boolean };
 
 export type H2Type = {
   title: string;
   isSrOnly?: boolean;
+  isHidden?: boolean;
 };
