@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { combine, devtools, persist } from 'zustand/middleware';
+import { combine, createJSONStorage, devtools, persist } from 'zustand/middleware';
 
 type CompanyNameType = {
   companyName: string | null;
@@ -31,6 +31,7 @@ export const useCompanyNameStore = create(
       })),
       {
         name: 'CompanyNameStore',
+        storage: createJSONStorage(() => sessionStorage),
         partialize: (state) => ({
           companyName: state.companyName,
         }),
