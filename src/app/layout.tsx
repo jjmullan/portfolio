@@ -38,7 +38,7 @@ export default function RootLayout({
           <Navigation />
 
           {/* 컨텍스트 */}
-          <main className="overflow-y-scroll">{children}</main>
+          <main className="overflow-y-scroll flex flex-col items-center justify-center w-full">{children}</main>
         </div>
       </body>
     </html>
