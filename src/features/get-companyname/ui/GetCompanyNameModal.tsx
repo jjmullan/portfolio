@@ -7,7 +7,7 @@ export default function GetCompanyNameModal() {
   const companyName = useCompanyName();
   const setCompanyName = useSetCompanyName();
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmitCompanyName = (formData: FormData) => {
     if (!formData.get('company-name')) return;
 
     const value = formData.get('company-name') as string;
@@ -28,7 +28,7 @@ export default function GetCompanyNameModal() {
           <DialogTitle>안녕하세요 채용 담당자님!</DialogTitle>
           <DialogDescription>회사명을 입력해주시면, 제게 큰 도움이 됩니다😊</DialogDescription>
         </DialogHeader>
-        <form action={handleSubmit} className="flex flex-col gap-3 mt-2">
+        <form action={handleSubmitCompanyName} className="flex flex-col gap-3 mt-2">
           <label htmlFor="company-name" className="sr-only">
             회사명
           </label>
@@ -42,9 +42,17 @@ export default function GetCompanyNameModal() {
             required
             maxLength={30}
           />
-          <button type="submit" className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer">
-            확인
-          </button>
+          <div className="flex flex-col gap-y-2">
+            <button type="submit" className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer w-full">
+              등록하기
+            </button>
+            <button
+              type="button"
+              className="bg-gray-100 rounded-lg px-4 py-2 text-sm cursor-pointer w-full"
+              onClick={() => setCompanyName('일반 사용자')}>
+              채용 담당자가 아닙니다
+            </button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

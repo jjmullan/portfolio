@@ -12,7 +12,7 @@ export default function Home() {
       <div className="flex flex-col w-full items-start justify-start gap-y-3 px-8">
         <div className="flex flex-col w-full text-[28px]">
           <p>
-            안녕하세요, <span>{companyName}</span> 채용 담당자님
+            안녕하세요, <span>{companyName !== '일반 사용자' && companyName !== null && companyName}</span> 채용 담당자님
           </p>
           <p>프론트엔드 신입 개발자 최영준입니다</p>
         </div>
