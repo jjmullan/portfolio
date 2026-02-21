@@ -12,6 +12,7 @@
     "type-gen": "npx supabase gen types typescript --project-id zacgjsjxgeytlbziufku --schema public > src/shared/model/types/supabase.type.ts"
   },
   "dependencies": {
+    "@next/third-parties": "^16.1.6",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "class-variance-authority": "^0.7.1",
