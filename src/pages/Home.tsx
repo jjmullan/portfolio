@@ -1,7 +1,7 @@
 'use client';
 
+import { useCompanyName } from '@entities/user';
 import AskAiContextBox from '@features/ask-ai/ui/AskAiContextBox';
-import { useCompanyName } from '@features/get-companyname';
 import Link from 'next/link';
 
 export default function Home() {

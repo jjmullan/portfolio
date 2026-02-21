@@ -1,11 +1,14 @@
 'use client';
 
+import { useCompanyName } from '@entities/user';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, useLayoutEffect, useRef, useState } from 'react';
 import { insertContext } from '../api/insertContext';
 
 export default function AskAiContextBox() {
+  const companyName = useCompanyName();
+
   // Context 입력창 변경 기능
   const [context, setContext] = useState<string>('');
   const handleChangeContext = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -27,7 +30,7 @@ export default function AskAiContextBox() {
     setIsLoading(true);
     const value = formData.get('context') as string;
     try {
-      await insertContext({ context: value });
+      await insertContext({ company: companyName, context: value });
       router.push(`/chat?context=${encodeURIComponent(value)}`);
     } catch (error) {
       console.error('검색 과정에서 오류 발생', error);
