@@ -16,11 +16,11 @@ export default function Navigation() {
     <aside className={`p-3 flex flex-col gap-y-10 h-full overflow-y-auto ${toggleMenu ? 'w-[240px]' : 'w-[60px]'} overflow-hidden`}>
       <button
         type="button"
-        className="w-9 h-9 p-2 rounded-md cursor-pointer hover:bg-gray-100"
+        className="w-8 p-2 rounded-md cursor-pointer hover:bg-gray-100"
         onClick={toggleMenuOnOff}
         aria-expanded={toggleMenu}
         aria-controls="navigation-panel">
-        <Image src={'/icons/menuonoff.svg'} alt={`메뉴 ${toggleMenu ? '닫기' : '열기'}`} width={20} height={20} />
+        <Image src={'/icons/menuonoff.svg'} alt={`메뉴 ${toggleMenu ? '닫기' : '열기'}`} width={16} height={16} />
       </button>
       <div className="flex flex-col gap-y-6">
         <nav>
@@ -51,7 +51,7 @@ export default function Navigation() {
             <H2 title="최근 대화 내역" isHidden={!toggleMenu} />
             <ul className="flex flex-col">
               {/* 대화 내역이 없는 경우 */}
-              <li className="px-2 rounded-md flex items-center gap-x-2 w-full h-9">대화를 시작해보세요😊</li>
+              <li className="px-2 rounded-md flex items-center gap-x-2 w-full h-9 text-sm">대화를 시작해보세요😊</li>
 
               {/* map 메서드로 업데이트 */}
               <ListLink href={``} image="" title="API 기반 포트폴리오 웹사이트" />

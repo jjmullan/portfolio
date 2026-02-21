@@ -8,9 +8,9 @@ export default function ListLink({ href, title, image, isInnerLink = false, isHi
     <li className="px-2 hover:bg-gray-100 rounded-md">
       <Link href={href} target={`${isInnerLink ? '' : '_blank'}`} rel="noopener noreferrer" className="flex items-center gap-x-3 w-full h-9.5">
         <Activity mode={image ? 'visible' : 'hidden'}>
-          <Image src={`/icons/${image}.svg`} alt={image ?? ''} width={20} height={20} />
+          <Image src={`/icons/${image}.svg`} alt={image ?? ''} width={16} height={16} />
         </Activity>
-        <span className="truncate" hidden={isHidden}>
+        <span className="truncate text-sm" hidden={isHidden}>
           {title}
         </span>
       </Link>
