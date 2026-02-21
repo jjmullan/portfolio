@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { GetCompanyNameModal } from '@features/get-companyname';
 import Navigation from '@widgets/navigation/Navigation';
 
 const geistSans = Geist({
@@ -34,9 +35,11 @@ export default function RootLayout({
         <div className="h-screen flex">
           <h1 className="sr-only">최영준의 포트폴리오</h1>
 
+          {/* 회사명 모달 */}
+          <GetCompanyNameModal />
+
           {/* 메뉴 */}
           <Navigation />
-
           {/* 컨텍스트 */}
           <main className="overflow-y-scroll flex flex-col items-center justify-center w-full">{children}</main>
         </div>
