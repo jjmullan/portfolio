@@ -1,11 +1,13 @@
 'use client';
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/shadcn/dialog';
-import { useCompanyName, useSetCompanyName } from '../model/company';
+import { useCompanyName, useHasHydrated, useSetCompanyName } from '../model/company';
 
 export default function GetCompanyNameModal() {
   const companyName = useCompanyName();
   const setCompanyName = useSetCompanyName();
+  const hasHydrated = useHasHydrated();
+  if (!hasHydrated) return null;
 
   const handleSubmitCompanyName = (formData: FormData) => {
     if (!formData.get('company-name')) return;
