@@ -34,6 +34,9 @@ export const useCompanyNameStore = create(
         partialize: (state) => ({
           companyName: state.companyName,
         }),
+        onRehydrateStorage: () => (state) => {
+          state?.actions.setHasHydrated(true);
+        },
       },
     ),
     { name: 'CompanyNameStore' },
