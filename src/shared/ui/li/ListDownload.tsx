@@ -1,4 +1,4 @@
-import type { ListLinkType } from '@shared/model/type';
+import type { ListLinkType } from '@shared/model/types/types';
 import Image from 'next/image';
 
 export default function ListDownload({ href, image, title }: ListLinkType) {

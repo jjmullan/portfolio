@@ -1,4 +1,4 @@
-import type { ListInnerLinkType } from '@shared/model/type';
+import type { ListInnerLinkType } from '@shared/model/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Activity } from 'react';

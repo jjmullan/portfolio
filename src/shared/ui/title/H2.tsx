@@ -1,4 +1,4 @@
-import type { H2Type } from '@shared/model/type';
+import type { H2Type } from '@shared/model/types/types';
 
 export default function H2({ title, isSrOnly = false, isHidden = false }: H2Type) {
   return (
