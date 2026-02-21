@@ -43,3 +43,4 @@ next-env.d.ts
 # AI Agent
 CLAUDE.md
 AGENTS.md
+.claude/settings.local.json
