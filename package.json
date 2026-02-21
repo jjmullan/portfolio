@@ -8,9 +8,12 @@
     "clean": "rm -rf .next tsconfig.tsbuildinfo",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "type-gen": "npx supabase gen types typescript --project-id zacgjsjxgeytlbziufku --schema public > src/shared/model/supabase.type.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.97.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -21,6 +24,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "supabase": "^2.76.12",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
