@@ -6,6 +6,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 export default function GetCompanyNameModal() {
   const companyName = useCompanyName();
   const setCompanyName = useSetCompanyName();
+
+  // 하이드레이션이 완료된 후 렌더링하는 로직 추가
   const hasHydrated = useHasHydrated();
   if (!hasHydrated) return null;
 
@@ -45,14 +47,14 @@ export default function GetCompanyNameModal() {
             maxLength={30}
           />
           <div className="flex flex-col gap-y-2">
-            <button type="submit" className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer w-full">
-              등록하기
+            <button type="submit" className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer w-full font-bold">
+              입력 완료
             </button>
             <button
               type="button"
-              className="bg-gray-100 rounded-lg px-4 py-2 text-sm cursor-pointer w-full"
-              onClick={() => setCompanyName('일반 사용자')}>
-              채용 담당자가 아닙니다
+              className="bg-gray-100 rounded-lg px-4 py-2 text-sm text-black/80 cursor-pointer w-full"
+              onClick={() => setCompanyName('비공개')}>
+              공개하고 싶지 않아요
             </button>
           </div>
         </form>
