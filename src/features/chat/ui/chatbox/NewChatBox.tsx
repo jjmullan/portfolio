@@ -1,12 +1,11 @@
 'use client';
 
-import { useCompanyName } from '@entities/user';
+import { useCompanyName } from '@shared/model/store/company';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, useLayoutEffect, useRef, useState } from 'react';
-import { insertContext } from '../api/insertContext';
 
-export default function AskAiContextBox() {
+export default function NewChatBox() {
   const companyName = useCompanyName();
 
   // Context 입력창 변경 기능
@@ -22,21 +21,17 @@ export default function AskAiContextBox() {
   }, [companyName]);
 
   // 페이지 이동 로직
+  // input_context 는 URL 쿼리 파라미터로 /chat 에 전달하고,
+  // Supabase INSERT 는 /chat 에서 응답 완료 후 input + output 을 함께 처리한다.
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const handleSubmitContext = async (formData: FormData) => {
+  const handleSubmitContext = (formData: FormData) => {
     if (!formData.get('context')) return;
 
     setIsLoading(true);
     const value = formData.get('context') as string;
-    try {
-      await insertContext({ company: companyName, context: value });
-      router.push(`/chat?context=${encodeURIComponent(value)}`);
-    } catch (error) {
-      console.error('검색 과정에서 오류 발생', error);
-    } finally {
-      setIsLoading(false);
-    }
+    router.push(`/chat?context=${encodeURIComponent(value)}`);
+    setIsLoading(false);
   };
 
   return (
@@ -50,7 +45,7 @@ export default function AskAiContextBox() {
         ref={contextRef}
         value={context}
         onChange={handleChangeContext}
-        className="py-4 pl-4 pr-8 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md"
+        className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-y disabled:bg-gray-50"
         placeholder="무엇이든 물어보세요"
         aria-label={context ? `${context} 검색` : '검색'}
         disabled={isLoading}

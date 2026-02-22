@@ -1,7 +1,8 @@
 'use client';
 
-import { useCompanyName } from '@entities/user';
-import AskAiContextBox from '@features/ask-ai/ui/AskAiContextBox';
+import { NewChatBox } from '@features/chat';
+import { useCompanyName } from '@shared/model/store/company';
+
 import Link from 'next/link';
 
 export default function Home() {
@@ -28,7 +29,7 @@ export default function Home() {
           </li>
         </ul>
       </div>
-      <AskAiContextBox />
+      <NewChatBox />
     </div>
   );
 }

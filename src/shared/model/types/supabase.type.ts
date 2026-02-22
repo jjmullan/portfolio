@@ -10,22 +10,25 @@ export type Database = {
     Tables: {
       context: {
         Row: {
-          company: string | null;
-          context: string;
+          company_name: string | null;
+          context_id: string;
           created_at: string;
-          id: string;
+          input_context: string;
+          output_context: string;
         };
         Insert: {
-          company?: string | null;
-          context: string;
+          company_name?: string | null;
+          context_id?: string;
           created_at?: string;
-          id?: string;
+          input_context: string;
+          output_context: string;
         };
         Update: {
-          company?: string | null;
-          context?: string;
+          company_name?: string | null;
+          context_id?: string;
           created_at?: string;
-          id?: string;
+          input_context?: string;
+          output_context?: string;
         };
         Relationships: [];
       };

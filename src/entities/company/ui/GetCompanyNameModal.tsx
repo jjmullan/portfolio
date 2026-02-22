@@ -1,7 +1,7 @@
 'use client';
 
-import { useCompanyName, useHasHydrated, useSetCompanyName } from '@entities/user';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/shadcn/dialog';
+import { useCompanyName, useHasHydrated, useSetCompanyName } from '../../../shared/model/store/company';
 
 export default function GetCompanyNameModal() {
   const companyName = useCompanyName();
