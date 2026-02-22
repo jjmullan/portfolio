@@ -99,10 +99,11 @@ export default function NewChatBox() {
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
         placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
         aria-label={context ? `${context} 검색` : '검색'}
-        disabled={isLoading}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         rows={1}
+        // disabled={isLoading}
+        disabled={true}
       />
       <button
         type="submit"

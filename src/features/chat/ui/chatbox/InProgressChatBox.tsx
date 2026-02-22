@@ -86,10 +86,11 @@ export default function InProgressChatBox({ onMessageSent }: InProgressChatBoxTy
         value={input}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        disabled={isStreaming}
         placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
         rows={1}
+        // disabled={isStreaming}
+        disabled={true}
       />
       <button
         type="submit"
