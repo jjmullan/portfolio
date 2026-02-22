@@ -9,7 +9,7 @@ export default function Home() {
   const companyName = useCompanyName();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-y-10 w-full max-w-[640px] px-10 min-h-screen">
+    <div className="flex flex-col items-center justify-center gap-y-6 w-full max-w-[640px] px-10 min-h-screen">
       <div className="flex flex-col w-full items-start justify-start gap-y-3 px-8">
         <div className="flex flex-col w-full text-[28px]">
           <p>

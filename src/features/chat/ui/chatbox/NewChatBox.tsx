@@ -20,6 +20,17 @@ export default function NewChatBox() {
     if (companyName !== null) contextRef.current?.focus();
   }, [companyName]);
 
+  // Context 입력창 높이 자동 조절 (최대 10줄)
+  useLayoutEffect(() => {
+    const el = contextRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+    const paddingY = parseFloat(getComputedStyle(el).paddingTop) + parseFloat(getComputedStyle(el).paddingBottom);
+    const maxHeight = lineHeight * 10 + paddingY;
+    el.style.height = `${Math.min(el.scrollHeight, maxHeight)}px`;
+  }, [context]);
+
   // 페이지 이동 로직
   // input_context 는 URL 쿼리 파라미터로 /chat 에 전달하고,
   // Supabase INSERT 는 /chat 에서 응답 완료 후 input + output 을 함께 처리한다.
@@ -55,16 +66,17 @@ export default function NewChatBox() {
         ref={contextRef}
         value={context}
         onChange={handleChangeContext}
-        className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-y disabled:bg-gray-50"
+        className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
         placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
         aria-label={context ? `${context} 검색` : '검색'}
         disabled={isLoading}
         onKeyDown={handleKeyDown}
         tabIndex={0}
+        rows={1}
       />
       <button
         type="submit"
-        className="absolute bottom-3 right-3 rounded-lg p-2 cursor-pointer bg-white disabled:cursor-not-allowed"
+        className="absolute bottom-3 right-2 rounded-lg p-3 cursor-pointer bg-white disabled:cursor-not-allowed"
         disabled={isLoading}>
         <Image src={'/icons/enter.svg'} alt={''} width={16} height={16} />
       </button>
