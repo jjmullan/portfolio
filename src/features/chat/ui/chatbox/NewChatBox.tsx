@@ -3,7 +3,7 @@
 import { useCompanyName } from '@shared/model/store/company';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { type ChangeEvent, useLayoutEffect, useRef, useState } from 'react';
+import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 
 export default function NewChatBox() {
   const companyName = useCompanyName();
@@ -25,7 +25,7 @@ export default function NewChatBox() {
   // Supabase INSERT 는 /chat 에서 응답 완료 후 input + output 을 함께 처리한다.
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const handleSubmitContext = (formData: FormData) => {
+  const handleRequestContext = (formData: FormData) => {
     if (!formData.get('context')) return;
 
     setIsLoading(true);
@@ -34,8 +34,18 @@ export default function NewChatBox() {
     setIsLoading(false);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('context', context);
+      handleRequestContext(formData);
+    }
+  };
+
   return (
-    <form action={handleSubmitContext} className="w-full relative">
+    <form action={handleRequestContext} className="w-full relative">
       <label htmlFor="context" className="sr-only">
         AI 검색어 입력
       </label>
@@ -46,9 +56,10 @@ export default function NewChatBox() {
         value={context}
         onChange={handleChangeContext}
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-y disabled:bg-gray-50"
-        placeholder="무엇이든 물어보세요"
+        placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
         aria-label={context ? `${context} 검색` : '검색'}
         disabled={isLoading}
+        onKeyDown={handleKeyDown}
         tabIndex={0}
       />
       <button
