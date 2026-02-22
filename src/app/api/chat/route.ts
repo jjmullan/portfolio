@@ -37,7 +37,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   // 첫 요청: Cache Write (토큰 비용 +25%), 이후 5분 이내 요청: Cache Read (토큰 비용 -90%)
   const stream = anthropic.messages.stream({
     model: 'claude-sonnet-4-6',
-    max_tokens: 700, // 한국어 약 1,000자 수준
+    max_tokens: 1_500, // 한국어 약 2,000자 수준
     system: [
       {
         type: 'text',
