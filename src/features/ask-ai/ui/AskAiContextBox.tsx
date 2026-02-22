@@ -18,8 +18,8 @@ export default function AskAiContextBox() {
   // Context 입력창 Focus 기능
   const contextRef = useRef<HTMLTextAreaElement>(null);
   useLayoutEffect(() => {
-    contextRef.current?.focus();
-  }, []);
+    if (companyName !== null) contextRef.current?.focus();
+  }, [companyName]);
 
   // 페이지 이동 로직
   const [isLoading, setIsLoading] = useState(false);
