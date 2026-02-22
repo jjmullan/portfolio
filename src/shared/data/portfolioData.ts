@@ -1,5 +1,10 @@
-// Claude API System Prompt 에 주입할 포트폴리오 학습 정보
-// 이 파일에 최영준에 대한 정보를 직접 작성하여 AI 응답의 근거 데이터로 활용한다.
+/**
+ * @file portfolioData.ts
+ * @description Claude AI System Prompt 에 주입할 포트폴리오 정보 상수.
+ * 최영준에 대한 소개, 핵심 역량, 프로젝트 경험, 자격증 등의 정보를 Markdown 형식으로 작성한다.
+ * `/api/chat` Route Handler 에서 System Prompt 의 일부로 사용되어,
+ * AI 가 포트폴리오 내용을 근거로 채용 담당자의 질문에 답변할 수 있도록 한다.
+ */
 
 export const PORTFOLIO_DATA = `
 # 본인 소개
@@ -56,7 +61,7 @@ export const PORTFOLIO_DATA = `
 
 1. 설계 단계에서의 기획의 중요성
 - 프로젝트를 진행하면서 도메인 개선으로 인해 RDBMS 구조를 계속해서 변경하거나 인증 로직을 변경해야 하는 상황이 발생하였음
-- 계속된 구조 변경으로 ‘살아있는 문서’ 관리에 많은 시간이 소모되었음
+- 계속된 구조 변경으로 '살아있는 문서' 관리에 많은 시간이 소모되었음
 - 서비스에 대한 심도있는 분석을 바탕으로 도메인과 기능을 명확히 정의하고, 서비스의 확장성, User Flow 를 고려하는 것이 개발 생산성과 서비스 안정성에 더 큰 영향을 준다는 것을 깨닫게 되었음
 
 # 프로젝트 2
@@ -117,6 +122,6 @@ export const PORTFOLIO_DATA = `
 
 4. 멋쟁이사자처럼 Frontend Bootcamp 13기 2025. 2. 5 ~ 8. 7
 - HTML, CSS, JavaScript, TypeScript, React, Next.js 의 핵심 동작 원리와 개념을 이해
-- 총 3회 팀 프로젝트 진행: HTML, CSS 기반 ‘Kurly 클론 코딩’, JavaScript 기반 ‘QuokkaDocs’, TypesScript, React, Next.js 기반 ‘오구텃밭’
+- 총 3회 팀 프로젝트 진행: HTML, CSS 기반 'Kurly 클론 코딩', JavaScript 기반 'QuokkaDocs', TypesScript, React, Next.js 기반 '오구텃밭'
 - 우수 수료생(3인) 선정
 ` as const;

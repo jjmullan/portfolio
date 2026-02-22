@@ -1,8 +1,25 @@
 'use client';
 
+/**
+ * @file GetCompanyNameModal.tsx
+ * @description 포트폴리오 최초 진입 시 채용 담당자의 회사명을 수집하는 모달 컴포넌트.
+ * `companyName` 이 `null` 인 경우(= 최초 접근) 자동으로 모달이 열리며,
+ * 외부 클릭 및 ESC 키로 닫히지 않아 반드시 입력을 완료해야 한다.
+ * Zustand persist 의 하이드레이션 완료 후에만 렌더링하여 SSR/CSR 불일치를 방지한다.
+ */
+
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/shadcn/dialog';
 import { useCompanyName, useHasHydrated, useSetCompanyName } from '../../../shared/model/store/company';
 
+/**
+ * 채용 담당자 회사명 입력 모달 컴포넌트.
+ *
+ * @description
+ * - `companyName === null` 이면 모달이 자동으로 열린다.
+ * - 회사명 입력 완료 또는 '공개하고 싶지 않아요' 선택 시 모달이 닫힌다.
+ * - `'비공개'` 를 선택한 경우 이력서 다운로드 기능이 비활성화된다.
+ * - 하이드레이션 전에는 `null` 을 반환하여 렌더링을 지연시킨다.
+ */
 export default function GetCompanyNameModal() {
   const companyName = useCompanyName();
   const setCompanyName = useSetCompanyName();
@@ -11,6 +28,12 @@ export default function GetCompanyNameModal() {
   const hasHydrated = useHasHydrated();
   if (!hasHydrated) return null;
 
+  /**
+   * 회사명 폼 제출 핸들러.
+   * 입력값이 없거나 공백인 경우 실행하지 않는다.
+   *
+   * @param formData - 폼 데이터 (company-name 필드 포함)
+   */
   const handleSubmitCompanyName = (formData: FormData) => {
     if (!formData.get('company-name')) return;
 

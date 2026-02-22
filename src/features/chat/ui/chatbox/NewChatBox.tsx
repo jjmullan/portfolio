@@ -1,10 +1,27 @@
 'use client';
 
+/**
+ * @file NewChatBox.tsx
+ * @description 새 채팅을 시작하는 메시지 입력 컴포넌트.
+ * 홈 화면에서 사용자의 첫 질문을 입력받아 `/chat` 페이지로 이동시킨다.
+ * 입력값은 URL 쿼리 파라미터(`context`)로 전달되며,
+ * Supabase INSERT 는 AI 응답 완료 후 `/chat` 페이지에서 처리한다.
+ */
+
 import { useCompanyName } from '@shared/model/store/company';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 
+/**
+ * 새 채팅을 시작하는 메시지 입력 컴포넌트.
+ *
+ * @description
+ * - `companyName` 이 설정되면 자동으로 입력창에 포커스된다.
+ * - 입력 줄 수에 따라 textarea 높이가 자동으로 조절된다 (최대 10줄).
+ * - Enter 키로 전송하고 Shift+Enter 로 줄바꿈을 입력한다.
+ * - 전송 시 입력값을 URL 쿼리 파라미터로 인코딩하여 `/chat` 으로 이동한다.
+ */
 export default function NewChatBox() {
   const companyName = useCompanyName();
 
@@ -36,6 +53,13 @@ export default function NewChatBox() {
   // Supabase INSERT 는 /chat 에서 응답 완료 후 input + output 을 함께 처리한다.
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  /**
+   * 폼 제출 핸들러. 입력값을 URL 쿼리 파라미터로 인코딩하여 `/chat` 으로 이동한다.
+   * 입력값이 없으면 실행하지 않는다.
+   *
+   * @param formData - 폼 데이터 (context 필드 포함)
+   */
   const handleRequestContext = (formData: FormData) => {
     if (!formData.get('context')) return;
 
@@ -45,6 +69,12 @@ export default function NewChatBox() {
     setIsLoading(false);
   };
 
+  /**
+   * Enter 키 입력 시 메시지를 전송하는 키보드 이벤트 핸들러.
+   * Shift+Enter 는 줄바꿈으로 처리한다.
+   *
+   * @param e - textarea 키보드 이벤트
+   */
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();

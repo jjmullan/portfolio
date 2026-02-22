@@ -1,17 +1,40 @@
 'use client';
 
+/**
+ * @file InProgressChatBox.tsx
+ * @description 채팅 진행 중 사용되는 메시지 입력 컴포넌트.
+ * 사용자 입력을 받아 Claude AI 에게 스트리밍 방식으로 메시지를 전송하고,
+ * 응답 완료 후 `onMessageSent` 콜백을 호출하여 상위 컴포넌트에 결과를 전달한다.
+ * 스트리밍 중에는 입력창과 전송 버튼이 비활성화된다.
+ */
+
 import Image from 'next/image';
 import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
 import { sendMessage } from '../../api/sendMessage';
 import type { InProgressChatBoxType } from '../../model/types';
 import { useChatActions, useChatMessages, useIsStreaming } from '../../model/useChatStore';
 
+/**
+ * 채팅 진행 중 메시지를 입력하고 전송하는 컴포넌트.
+ *
+ * @description
+ * - Enter 키로 메시지를 전송하고, Shift+Enter 로 줄바꿈을 입력한다.
+ * - 전송 시 `useChatStore` 액션을 통해 사용자 메시지를 추가하고 스트리밍을 시작한다.
+ * - `sendMessage` API 를 통해 대화 히스토리를 포함한 메시지를 Claude AI 에 전달한다.
+ * - 응답 완료 시 `onMessageSent` 콜백으로 input/output 텍스트를 상위에 전달한다.
+ *
+ * @param props.onMessageSent - AI 응답 완료 시 호출되는 콜백 (입력 텍스트, 전체 응답 텍스트)
+ */
 export default function InProgressChatBox({ onMessageSent }: InProgressChatBoxType) {
   const [input, setInput] = useState('');
   const messages = useChatMessages();
   const isStreaming = useIsStreaming();
   const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage } = useChatActions();
 
+  /**
+   * 메시지 전송을 처리하는 핸들러.
+   * 입력값이 비어있거나 스트리밍 중이면 실행하지 않는다.
+   */
   const handleSubmit = async () => {
     const trimmed = input.trim();
     if (!trimmed || isStreaming) return;
@@ -35,6 +58,12 @@ export default function InProgressChatBox({ onMessageSent }: InProgressChatBoxTy
     });
   };
 
+  /**
+   * Enter 키 입력 시 메시지를 전송하는 키보드 이벤트 핸들러.
+   * Shift+Enter 는 줄바꿈으로 처리한다.
+   *
+   * @param e - textarea 키보드 이벤트
+   */
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();

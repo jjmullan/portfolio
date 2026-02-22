@@ -1,9 +1,22 @@
 'use client';
 
+/**
+ * @file ChatMessageList.tsx
+ * @description 대화 메시지 목록을 렌더링하는 컴포넌트 모음.
+ * `useChatStore` 에서 메시지 상태를 구독하여 사용자/어시스턴트 메시지를 순서대로 표시한다.
+ * 어시스턴트 메시지는 `react-markdown` + `remark-gfm` 으로 Markdown 형식으로 렌더링되며,
+ * 스트리밍 중에는 커서 애니메이션(`animate-pulse`)이 표시된다.
+ */
+
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useChatMessages, useIsStreaming, useStreamingContent } from '../../model/useChatStore';
 
+/**
+ * 사용자가 보낸 메시지를 오른쪽 정렬로 표시하는 컴포넌트.
+ *
+ * @param props.content - 표시할 메시지 텍스트 (공백 보존을 위해 `whitespace-pre-wrap` 적용)
+ */
 function UserMessage({ content }: { content: string }) {
   return (
     <div className="flex justify-end">
@@ -12,6 +25,13 @@ function UserMessage({ content }: { content: string }) {
   );
 }
 
+/**
+ * AI 어시스턴트의 응답을 왼쪽 정렬로 표시하는 컴포넌트.
+ * Markdown 을 GFM(GitHub Flavored Markdown) 형식으로 파싱하여 렌더링한다.
+ *
+ * @param props.content - 표시할 Markdown 텍스트
+ * @param props.isStreaming - 스트리밍 진행 중 여부. `true` 이면 커서 애니메이션을 표시한다 (기본값: `false`)
+ */
 function AssistantMessage({ content, isStreaming = false }: { content: string; isStreaming?: boolean }) {
   return (
     <div className="flex justify-start">
@@ -48,6 +68,14 @@ function AssistantMessage({ content, isStreaming = false }: { content: string; i
   );
 }
 
+/**
+ * 전체 대화 메시지 목록을 렌더링하는 최상위 컴포넌트.
+ *
+ * @description
+ * `useChatStore` 에서 완료된 메시지 배열, 스트리밍 상태, 스트리밍 콘텐츠를 구독한다.
+ * 완료된 메시지는 `role` 에 따라 `UserMessage` 또는 `AssistantMessage` 로 렌더링되며,
+ * 스트리밍 중인 경우 목록 하단에 실시간 응답을 별도로 렌더링한다.
+ */
 export default function ChatMessageList() {
   const messages = useChatMessages();
   const isStreaming = useIsStreaming();
