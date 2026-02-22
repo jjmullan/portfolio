@@ -35,7 +35,7 @@ export default function ListLink({ href, title, image, isInnerLink = false, isHi
   return (
     <li className="px-2 hover:bg-gray-100 rounded-md">
       <Link
-        href={href}
+        href={disabled ? '' : href}
         target={`${isInnerLink ? '' : '_blank'}`}
         rel="noopener noreferrer"
         className={`flex items-center gap-x-3 w-full h-9.5 ${disabled && 'cursor-not-allowed'}`}
