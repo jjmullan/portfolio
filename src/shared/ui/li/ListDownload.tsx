@@ -28,7 +28,7 @@ export default function ListDownload({ href, image, title }: ListLinkType) {
   return (
     <li className="px-2 hover:bg-gray-100 rounded-md">
       <a
-        href={href}
+        href={hasCompanyName ? href : ''}
         download={hasCompanyName ? true : undefined}
         onClick={(e) => {
           if (!hasCompanyName) {
