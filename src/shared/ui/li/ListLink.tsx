@@ -1,3 +1,6 @@
+'use client';
+
+import { useCompanyName } from '@shared/model/store/company';
 /**
  * @file ListLink.tsx
  * @description 사이드바 링크 목록의 개별 아이템 컴포넌트.
@@ -24,9 +27,24 @@ import { Activity } from 'react';
  * @param props.isHidden - 텍스트 숨김 여부 (기본값: `false`)
  */
 export default function ListLink({ href, title, image, isInnerLink = false, isHidden = false }: ListInnerLinkType) {
+  const companyName = useCompanyName();
+  const hasCompanyName = companyName !== '비공개';
+  const isGoogleDrive = title === 'Google Drive';
+  const disabled = !hasCompanyName && isGoogleDrive;
+
   return (
     <li className="px-2 hover:bg-gray-100 rounded-md">
-      <Link href={href} target={`${isInnerLink ? '' : '_blank'}`} rel="noopener noreferrer" className="flex items-center gap-x-3 w-full h-9.5">
+      <Link
+        href={href}
+        target={`${isInnerLink ? '' : '_blank'}`}
+        rel="noopener noreferrer"
+        className={`flex items-center gap-x-3 w-full h-9.5 ${disabled && 'cursor-not-allowed'}`}
+        onClick={(e) => {
+          if (disabled) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}>
         <Activity mode={image ? 'visible' : 'hidden'}>
           <Image src={`/icons/${image}.svg`} alt={image ?? ''} width={16} height={16} />
         </Activity>
