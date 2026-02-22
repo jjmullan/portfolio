@@ -27,7 +27,16 @@ export default function ListDownload({ href, image, title }: ListLinkType) {
 
   return (
     <li className="px-2 hover:bg-gray-100 rounded-md">
-      <a href={href} download={hasCompanyName} className={`flex items-center gap-x-3 w-full h-9.5 ${!hasCompanyName && 'cursor-not-allowed'}`}>
+      <a
+        href={href}
+        download={hasCompanyName ? true : undefined}
+        onClick={(e) => {
+          if (!hasCompanyName) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+        className={`flex items-center gap-x-3 w-full h-9.5 ${!hasCompanyName && 'cursor-not-allowed'}`}>
         <Image src={`/icons/${image}.svg`} alt={image ?? ''} width={16} height={16} />
         <span className="text-sm">{title}</span>
       </a>
