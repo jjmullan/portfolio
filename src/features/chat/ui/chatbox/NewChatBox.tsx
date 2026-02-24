@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 import { insertContextGroup } from '../../api/insertContextGroup';
+import { summarizeContext } from '../../api/summarizeContext';
 import { useChatActions } from '../../model/useChatStore';
 
 /**
@@ -55,10 +56,11 @@ export default function NewChatBox() {
   // Supabase INSERT 는 /chat 에서 응답 완료 후 input + output 을 함께 처리한다.
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setPendingInitialContext } = useChatActions();
+  const { setPendingInitialContext, setPendingContextGroup } = useChatActions();
 
   /**
    * 폼 제출 핸들러.
+   * 입력값을 AI 로 한 줄 요약하여 `subject` 를 생성하고,
    * `context_group` 테이블에 새 레코드를 생성한 뒤,
    * 반환된 `context_group_id` 를 `context` 쿼리 파라미터로 `/chat` 에 전달한다.
    * 입력값이 없으면 실행하지 않는다.
@@ -72,7 +74,9 @@ export default function NewChatBox() {
     setIsLoading(true);
     try {
       setPendingInitialContext(value);
-      const contextGroupId = await insertContextGroup({ company_name: companyName });
+      const subject = await summarizeContext(value);
+      const contextGroupId = await insertContextGroup({ company_name: companyName, subject });
+      setPendingContextGroup({ id: contextGroupId, subject });
       router.push(`/chat?context=${contextGroupId}`);
     } catch (error) {
       console.error(error);

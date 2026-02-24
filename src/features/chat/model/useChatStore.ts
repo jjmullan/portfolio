@@ -7,6 +7,7 @@
 
 import { create } from 'zustand';
 import { combine, devtools } from 'zustand/middleware';
+import type { ConversationItem } from './types';
 
 /**
  * 채팅 메시지 단일 항목의 타입.
@@ -28,12 +29,14 @@ export type ChatMessageType = {
  * @property isStreaming - AI 응답이 스트리밍 중인지 여부
  * @property streamingContent - 현재 스트리밍 중인 누적 텍스트 (완료 시 `messages` 로 이동)
  * @property pendingInitialContext - `/new` 에서 입력된 첫 질문. `/chat` 마운트 후 소비되면 초기화된다.
+ * @property pendingContextGroup - 스트리밍 완료 후 사이드바에 추가할 대화 그룹 정보. 소비 후 `null` 로 초기화된다.
  */
 type ChatStateType = {
   messages: ChatMessageType[];
   isStreaming: boolean;
   streamingContent: string;
   pendingInitialContext: string;
+  pendingContextGroup: ConversationItem | null;
 };
 
 /**
@@ -44,6 +47,7 @@ type ChatStateType = {
  * @property appendStreamingContent - 수신된 청크를 `streamingContent` 에 누적
  * @property finalizeAssistantMessage - 스트리밍 완료 후 `streamingContent` 를 assistant 메시지로 확정하고 초기화
  * @property setPendingInitialContext - `/new` 에서 `/chat` 으로 전달할 첫 질문을 저장
+ * @property setPendingContextGroup - 스트리밍 완료 후 사이드바에 추가할 대화 그룹 정보를 저장
  * @property reset - 스토어를 초기 상태로 되돌림
  */
 type ChatActionType = {
@@ -52,6 +56,7 @@ type ChatActionType = {
   appendStreamingContent(chunk: string): void;
   finalizeAssistantMessage(): void;
   setPendingInitialContext(context: string): void;
+  setPendingContextGroup(item: ConversationItem | null): void;
   reset(): void;
 };
 
@@ -60,6 +65,7 @@ const initialState: ChatStateType = {
   isStreaming: false,
   streamingContent: '',
   pendingInitialContext: '',
+  pendingContextGroup: null,
 };
 
 /**
@@ -95,6 +101,9 @@ export const useChatStore = create(
         setPendingInitialContext: (context: string) => {
           set({ pendingInitialContext: context });
         },
+        setPendingContextGroup: (item: ConversationItem | null) => {
+          set({ pendingContextGroup: item });
+        },
         reset: () => {
           set(initialState);
         },
@@ -115,6 +124,9 @@ export const useStreamingContent = () => useChatStore((state) => state.streaming
 
 /** `/new` 에서 저장된 첫 질문 텍스트를 구독하는 셀렉터 훅 */
 export const usePendingInitialContext = () => useChatStore((state) => state.pendingInitialContext);
+
+/** 스트리밍 완료 후 사이드바에 추가할 대화 그룹 정보를 구독하는 셀렉터 훅 */
+export const usePendingContextGroup = () => useChatStore((state) => state.pendingContextGroup);
 
 /** 채팅 스토어의 액션 객체를 반환하는 셀렉터 훅 */
 export const useChatActions = () => useChatStore((state) => state.actions);

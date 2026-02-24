@@ -6,7 +6,9 @@ import {
   insertContext,
   sendMessage,
   useChatActions,
+  useConversationHistoryActions,
   useIsStreaming,
+  usePendingContextGroup,
   usePendingInitialContext,
 } from '@features/chat';
 import { useSearchParams } from 'next/navigation';
@@ -18,8 +20,10 @@ export default function Chat() {
   const contextGroupId = searchParams?.get('context') ?? null;
 
   const pendingInitialContext = usePendingInitialContext();
+  const pendingContextGroup = usePendingContextGroup();
   const isStreaming = useIsStreaming();
-  const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage, setPendingInitialContext } = useChatActions();
+  const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage, setPendingInitialContext, setPendingContextGroup } = useChatActions();
+  const { prependConversation } = useConversationHistoryActions();
 
   const isInitialized = useRef(false);
 
@@ -31,7 +35,9 @@ export default function Chat() {
 
     // 소비 후 즉시 초기화하여 재사용 방지
     const question = pendingInitialContext;
+    const contextGroup = pendingContextGroup;
     setPendingInitialContext('');
+    setPendingContextGroup(null);
 
     addUserMessage(question);
     startStreaming();
@@ -41,11 +47,15 @@ export default function Chat() {
       onChunk: appendStreamingContent,
       onDone: (fullResponse) => {
         finalizeAssistantMessage();
-        insertContext({
-          context_group_id: contextGroupId,
-          input_context: question,
-          output_context: fullResponse,
-        }).catch(console.error);
+        if (contextGroupId) {
+          insertContext({
+            context_group_id: contextGroupId,
+            input_context: question,
+            output_context: fullResponse,
+          }).catch(console.error);
+        }
+        // 스트리밍 완료 시 사이드바 최근 대화 내역에 추가
+        if (contextGroup) prependConversation(contextGroup);
       },
       onError: () => {
         finalizeAssistantMessage();

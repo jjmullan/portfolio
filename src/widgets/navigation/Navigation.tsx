@@ -1,13 +1,21 @@
 'use client';
 
+import { fetchContextGroups, useConversationHistoryActions, useConversations } from '@features/chat';
 import ListDownload from '@shared/ui/li/ListDownload';
 import ListLink from '@shared/ui/li/ListLink';
 import H2 from '@shared/ui/title/H2';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Navigation() {
   const [toggleMenu, setToggleMenu] = useState(true);
+  const conversations = useConversations();
+  const { setConversations } = useConversationHistoryActions();
+
+  // 마운트 시 1회 Supabase 에서 최근 대화 내역 로드
+  useEffect(() => {
+    fetchContextGroups().then(setConversations).catch(console.error);
+  }, [setConversations]);
   const toggleMenuOnOff = () => {
     setToggleMenu((state) => !state);
   };
@@ -50,25 +58,13 @@ export default function Navigation() {
           <div>
             <H2 title="최근 대화 내역" isHidden={!toggleMenu} />
             <ul className="flex flex-col">
-              {/* 대화 내역이 없는 경우 */}
-              <li className="px-2 rounded-md flex items-center gap-x-2 w-full h-9 text-sm">대화를 시작해보세요😊</li>
-
-              {/* map 메서드로 업데이트 */}
-              <ListLink href={``} image="" title="API 기반 포트폴리오 웹사이트" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
-              <ListLink href={``} image="" title="Slack에 Github 연결 설치 오류" />
+              {conversations.length === 0 ? (
+                <li className="px-2 rounded-md flex items-center gap-x-2 w-full h-9 text-sm">대화를 시작해보세요😊</li>
+              ) : (
+                conversations.map(({ id, subject }) => (
+                  <ListLink key={id} href={`/chat?context=${id}`} title={subject} image="" isInnerLink={true} isHidden={!toggleMenu} />
+                ))
+              )}
             </ul>
           </div>
         </div>

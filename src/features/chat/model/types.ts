@@ -12,3 +12,14 @@
 export type InProgressChatBoxType = {
   contextGroupId: string | null;
 };
+
+/**
+ * 사이드바 최근 대화 내역 아이템 타입.
+ *
+ * @property id - `context_group_id` (UUID)
+ * @property subject - AI 가 요약한 한 줄 제목
+ */
+export type ConversationItem = {
+  id: string;
+  subject: string;
+};

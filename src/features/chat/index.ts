@@ -1,11 +1,15 @@
 // api
+export { fetchContextGroups } from './api/fetchContextGroups';
 export { insertContext } from './api/insertContext';
 export { insertContextGroup } from './api/insertContextGroup';
 export { sendMessage } from './api/sendMessage';
+export { summarizeContext } from './api/summarizeContext';
 
 // model
 export type { ChatMessageType } from './model/useChatStore';
-export { useChatActions, useChatMessages, useIsStreaming, usePendingInitialContext, useStreamingContent } from './model/useChatStore';
+export { useChatActions, useChatMessages, useIsStreaming, usePendingContextGroup, usePendingInitialContext, useStreamingContent } from './model/useChatStore';
+export type { ConversationItem } from './model/types';
+export { useConversationHistoryActions, useConversations } from './model/useConversationHistoryStore';
 
 // ui
 export { default as InProgressChatBox } from './ui/chatbox/InProgressChatBox';
