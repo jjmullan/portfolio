@@ -1,6 +1,7 @@
 'use client';
 
 import { fetchContextGroups, useConversationHistoryActions, useConversations } from '@features/chat';
+import { useCompanyId } from '@shared/model/store/company';
 import ListDownload from '@shared/ui/li/ListDownload';
 import ListLink from '@shared/ui/li/ListLink';
 import H2 from '@shared/ui/title/H2';
@@ -11,11 +12,12 @@ export default function Navigation() {
   const [toggleMenu, setToggleMenu] = useState(true);
   const conversations = useConversations();
   const { setConversations } = useConversationHistoryActions();
+  const companyId = useCompanyId();
 
-  // 마운트 시 1회 Supabase 에서 최근 대화 내역 로드
+  // companyId 변경 시 해당 company 의 최근 대화 내역만 로드. companyId 가 null 이면 빈 배열 반환
   useEffect(() => {
-    fetchContextGroups().then(setConversations).catch(console.error);
-  }, [setConversations]);
+    fetchContextGroups(companyId).then(setConversations).catch(console.error);
+  }, [companyId, setConversations]);
   const toggleMenuOnOff = () => {
     setToggleMenu((state) => !state);
   };
