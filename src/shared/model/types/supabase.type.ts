@@ -10,27 +10,56 @@ export type Database = {
     Tables: {
       context: {
         Row: {
-          company_name: string | null;
           context_id: string;
           created_at: string;
           input_context: string;
           output_context: string;
         };
         Insert: {
-          company_name?: string | null;
           context_id?: string;
           created_at?: string;
           input_context: string;
           output_context: string;
         };
         Update: {
-          company_name?: string | null;
           context_id?: string;
           created_at?: string;
           input_context?: string;
           output_context?: string;
         };
         Relationships: [];
+      };
+      context_group: {
+        Row: {
+          company_name: string | null;
+          context_group_id: string;
+          context_id: string;
+          created_at: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          company_name?: string | null;
+          context_group_id?: string;
+          context_id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          company_name?: string | null;
+          context_group_id?: string;
+          context_id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'context_group_context_id_fkey';
+            columns: ['context_id'];
+            isOneToOne: false;
+            referencedRelation: 'context';
+            referencedColumns: ['context_id'];
+          },
+        ];
       };
     };
     Views: {
@@ -158,8 +187,3 @@ export const Constants = {
     Enums: {},
   },
 } as const;
-
-// context 테이블 타입 추출 (채용 담당자가 검색한 이력을 저장하는 데이터베이스)
-export type Context = Tables<'context'>;
-export type ContextInsert = TablesInsert<'context'>;
-export type ContextUpdate = TablesUpdate<'context'>;
