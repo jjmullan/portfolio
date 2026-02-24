@@ -25,6 +25,6 @@ export async function summarizeContext(prompt: string): Promise<string> {
     body: JSON.stringify({ prompt }),
   });
 
-  if (!response.ok) return prompt.slice(0, 30);
+  if (!response.ok) return prompt.slice(0, 15);
   return response.text();
 }

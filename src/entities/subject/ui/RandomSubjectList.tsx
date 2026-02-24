@@ -32,12 +32,19 @@ export default function RandomSubjectList() {
     );
   }
 
-  if (subjects.length === 0) return null;
+  if (subjects.length === 0)
+    return (
+      <>
+        <li className="px-3 py-2 text-xs bg-gray-50 rounded-full truncate">우리 회사와의 직무 적합성을 분석해줘</li>
+        <li className="px-3 py-2 text-xs bg-gray-50 rounded-full truncate">프로젝트 경험을 소개해줘</li>
+        <li className="px-3 py-2 text-xs bg-gray-50 rounded-full truncate">본인만의 강점을 알려줘</li>
+      </>
+    );
 
   return (
     <>
       {subjects.map(({ context_group_id, subject }) => (
-        <li key={context_group_id} className="px-3 py-2 text-xs bg-gray-50 rounded-full">
+        <li key={context_group_id} className="px-3 py-2 text-xs w-full max-w-[160px] bg-gray-50 rounded-full truncate">
           <Link href={`/chat?context=${context_group_id}`}>{subject}</Link>
         </li>
       ))}

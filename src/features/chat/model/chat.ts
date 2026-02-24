@@ -54,7 +54,6 @@ type ChatActionType = {
   addUserMessage(content: string): void;
   startStreaming(): void;
   appendStreamingContent(chunk: string): void;
-  /** 스트리밍 콘텐츠를 특정 값으로 교체한다. 에러 메시지 표시 등에 사용된다. */
   setStreamingContent(content: string): void;
   finalizeAssistantMessage(): void;
   setMessages(messages: ChatMessageType[]): void;
