@@ -10,56 +10,59 @@ export type Database = {
     Tables: {
       context: {
         Row: {
+          context_group_id: string;
           context_id: string;
           created_at: string;
           input_context: string;
           output_context: string;
         };
         Insert: {
+          context_group_id: string;
           context_id?: string;
           created_at?: string;
           input_context: string;
           output_context: string;
         };
         Update: {
+          context_group_id?: string;
           context_id?: string;
           created_at?: string;
           input_context?: string;
           output_context?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'context_context_group_id_fkey';
+            columns: ['context_group_id'];
+            isOneToOne: false;
+            referencedRelation: 'context_group';
+            referencedColumns: ['context_group_id'];
+          },
+        ];
       };
       context_group: {
         Row: {
           company_name: string | null;
           context_group_id: string;
-          context_id: string | null;
           created_at: string;
-          updated_at: string | null;
+          subject: string;
+          updated_at: string;
         };
         Insert: {
           company_name?: string | null;
           context_group_id?: string;
-          context_id?: string | null;
           created_at?: string;
-          updated_at?: string | null;
+          subject?: string;
+          updated_at?: string;
         };
         Update: {
           company_name?: string | null;
           context_group_id?: string;
-          context_id?: string | null;
           created_at?: string;
-          updated_at?: string | null;
+          subject?: string;
+          updated_at?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'context_group_context_id_fkey';
-            columns: ['context_id'];
-            isOneToOne: false;
-            referencedRelation: 'context';
-            referencedColumns: ['context_id'];
-          },
-        ];
+        Relationships: [];
       };
     };
     Views: {

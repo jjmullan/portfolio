@@ -1,10 +1,24 @@
 'use client';
 
-import { ChatMessageList, InProgressChatBox, insertContext, sendMessage, useChatActions, usePendingInitialContext } from '@features/chat';
+import {
+  ChatMessageList,
+  InProgressChatBox,
+  insertContext,
+  sendMessage,
+  useChatActions,
+  useIsStreaming,
+  usePendingInitialContext,
+} from '@features/chat';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 export default function Chat() {
+  const searchParams = useSearchParams();
+  // context 쿼리 파라미터에 context_group_id 가 담겨 있다
+  const contextGroupId = searchParams?.get('context') ?? null;
+
   const pendingInitialContext = usePendingInitialContext();
+  const isStreaming = useIsStreaming();
   const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage, setPendingInitialContext } = useChatActions();
 
   const isInitialized = useRef(false);
@@ -28,6 +42,7 @@ export default function Chat() {
       onDone: (fullResponse) => {
         finalizeAssistantMessage();
         insertContext({
+          context_group_id: contextGroupId,
           input_context: question,
           output_context: fullResponse,
         }).catch(console.error);
@@ -38,10 +53,10 @@ export default function Chat() {
     });
   }, []);
 
-  // 메시지 추가 시 자동 스크롤
+  // 스트리밍 중: instant(즉시 이동), 완료 후: smooth(부드럽게 이동)
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: isStreaming ? 'instant' : 'smooth' });
   });
 
   return (
@@ -51,7 +66,7 @@ export default function Chat() {
         <div ref={bottomRef} />
       </div>
       <div className="fixed bottom-0 pb-4 w-full max-w-[640px] bg-white/80 backdrop-blur-sm">
-        <InProgressChatBox />
+        <InProgressChatBox contextGroupId={contextGroupId ?? null} />
       </div>
     </div>
   );

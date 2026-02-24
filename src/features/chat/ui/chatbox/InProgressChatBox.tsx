@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
 import { insertContext } from '../../api/insertContext';
 import { sendMessage } from '../../api/sendMessage';
+import type { InProgressChatBoxType } from '../../model/types';
 import { useChatActions, useChatMessages, useIsStreaming } from '../../model/useChatStore';
 
 /**
@@ -21,9 +22,11 @@ import { useChatActions, useChatMessages, useIsStreaming } from '../../model/use
  * - Enter 키로 메시지를 전송하고, Shift+Enter 로 줄바꿈을 입력한다.
  * - 전송 시 `useChatStore` 액션을 통해 사용자 메시지를 추가하고 스트리밍을 시작한다.
  * - `sendMessage` API 를 통해 대화 히스토리를 포함한 메시지를 Claude AI 에 전달한다.
- * - 응답 완료 시 `insertContext` 를 직접 호출하여 `context` 테이블에 I/O 데이터를 저장한다.
+ * - 응답 완료 시 `insertContext` 를 직접 호출하여 `context` 테이블에 I/O 및 `context_group_id` 를 저장한다.
+ *
+ * @param props.contextGroupId - 현재 세션의 `context_group_id`. `context` 테이블 INSERT 시 외래 키로 사용된다.
  */
-export default function InProgressChatBox() {
+export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxType) {
   const [input, setInput] = useState('');
   const messages = useChatMessages();
   const isStreaming = useIsStreaming();
@@ -49,6 +52,7 @@ export default function InProgressChatBox() {
       onDone: (fullResponse) => {
         finalizeAssistantMessage();
         insertContext({
+          context_group_id: contextGroupId,
           input_context: trimmed,
           output_context: fullResponse,
         }).catch(console.error);
