@@ -44,7 +44,7 @@ export default function RootLayout({
           <Navigation />
 
           {/* 컨텍스트 */}
-          <main className="overflow-y-scroll flex flex-col items-center justify-center w-full">{children}</main>
+          <main className="overflow-y-scroll flex flex-col items-center w-full">{children}</main>
 
           {/* 업데이트 */}
           <p className="fixed bottom-3 right-4 text-[10px] text-black/50 font-semibold">updated 2026. 2. 24</p>
