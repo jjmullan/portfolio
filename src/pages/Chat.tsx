@@ -45,7 +45,7 @@ export default function Chat() {
     // 소비 후 즉시 초기화하여 재사용 방지
     const question = pendingInitialContext;
     const contextGroup = pendingContextGroup;
-    setPendingInitialContext('');
+    // setPendingInitialContext('');
     setPendingContextGroup(null);
 
     // 이전 대화 내역이 스토어에 남아 있을 수 있으므로 초기화 후 신규 메시지 추가
