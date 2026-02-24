@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="ko-KR">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
-        <div className="h-screen flex">
+        <div className="h-screen flex relative">
           <h1 className="sr-only">최영준의 포트폴리오</h1>
 
           {/* 회사명 모달 */}
@@ -42,8 +42,12 @@ export default function RootLayout({
 
           {/* 메뉴 */}
           <Navigation />
+
           {/* 컨텍스트 */}
           <main className="overflow-y-scroll flex flex-col items-center justify-center w-full">{children}</main>
+
+          {/* 업데이트 */}
+          <p className="fixed bottom-3 right-4 text-[10px] text-black/50 font-semibold">updated 2026. 2. 24</p>
         </div>
       </body>
     </html>

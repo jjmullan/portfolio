@@ -44,3 +44,6 @@ next-env.d.ts
 CLAUDE.md
 AGENTS.md
 .claude/settings.local.json
+
+# Prompt
+prompt/*

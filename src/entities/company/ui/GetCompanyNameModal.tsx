@@ -20,7 +20,7 @@ import { insertCompany } from '../api/insertCompany';
  * @description
  * - `companyName === null` 이면 모달이 자동으로 열린다.
  * - 회사명 입력 완료 시 `company` 테이블에 INSERT 후 `company_id` 를 전역 상태에 저장한다.
- * - '공개하고 싶지 않아요' 선택 시 DB INSERT 없이 `companyName` 만 '비공개' 로 설정한다.
+ * - '공개하고 싶지 않아요' 선택 시 `company_name: '비공개'` 로 DB INSERT 후 `company_id` 를 저장한다.
  * - 하이드레이션 전에는 `null` 을 반환하여 렌더링을 지연시킨다.
  */
 export default function GetCompanyNameModal() {
@@ -33,17 +33,11 @@ export default function GetCompanyNameModal() {
   if (!hasHydrated) return null;
 
   /**
-   * 회사명 폼 제출 핸들러.
-   * 입력값을 `company` 테이블에 INSERT 하고 반환된 `company_id` 를 전역 상태에 저장한다.
-   * 입력값이 없거나 공백인 경우 실행하지 않는다.
+   * 회사명을 `company` 테이블에 INSERT 하고 반환된 `company_id` 를 전역 상태에 저장하는 공통 핸들러.
    *
-   * @param formData - 폼 데이터 (company-name 필드 포함)
+   * @param value - INSERT 할 회사명 문자열
    */
-  const handleSubmitCompanyName = async (formData: FormData) => {
-    const raw = formData.get('company-name') as string;
-    if (!raw?.trim()) return;
-
-    const value = raw.trim();
+  const handleInsertCompany = async (value: string) => {
     setIsLoading(true);
     try {
       const companyId = await insertCompany({ company_name: value });
@@ -54,6 +48,18 @@ export default function GetCompanyNameModal() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  /**
+   * 회사명 폼 제출 핸들러.
+   * 입력값이 없거나 공백인 경우 실행하지 않는다.
+   *
+   * @param formData - 폼 데이터 (company-name 필드 포함)
+   */
+  const handleSubmitCompanyName = async (formData: FormData) => {
+    const raw = formData.get('company-name') as string;
+    if (!raw?.trim()) return;
+    await handleInsertCompany(raw.trim());
   };
 
   return (
@@ -95,7 +101,7 @@ export default function GetCompanyNameModal() {
               type="button"
               disabled={isLoading}
               className="bg-gray-100 rounded-lg px-4 py-2 text-sm text-black/80 cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={() => setCompanyName('비공개')}>
+              onClick={() => handleInsertCompany('비공개')}>
               공개하고 싶지 않아요
             </button>
           </div>

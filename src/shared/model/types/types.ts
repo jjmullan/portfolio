@@ -31,3 +31,6 @@ export type H2Type = {
   isSrOnly?: boolean;
   isHidden?: boolean;
 };
+
+export const PROMPT_KEYS = ['01_resume', '02_project', '03_cover-letter', '04_career'] as const;
+export type PromptType = (typeof PROMPT_KEYS)[number];
