@@ -20,14 +20,10 @@ import type { TablesInsert } from '@shared/model/types/supabase.type';
  * @throws Supabase 삽입 오류 발생 시 에러를 throw
  *
  * @example
- * const contextGroupId = await insertContextGroup({ company_name: '(주)예시' });
+ * const contextGroupId = await insertContextGroup({ company_id: 'uuid-string', subject: '대화 주제' });
  */
 export async function insertContextGroup(contextGroup: TablesInsert<'context_group'>): Promise<string> {
-  const { data, error } = await supabase
-    .from('context_group')
-    .insert(contextGroup)
-    .select('context_group_id')
-    .single();
+  const { data, error } = await supabase.from('context_group').insert(contextGroup).select('context_group_id').single();
   if (error) throw error;
   return data.context_group_id;
 }

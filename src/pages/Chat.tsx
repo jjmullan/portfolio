@@ -2,6 +2,9 @@
 
 import {
   ChatMessageList,
+  type ChatMessageType,
+  type ContextRecord,
+  fetchContextsByGroupId,
   InProgressChatBox,
   insertContext,
   sendMessage,
@@ -22,7 +25,15 @@ export default function Chat() {
   const pendingInitialContext = usePendingInitialContext();
   const pendingContextGroup = usePendingContextGroup();
   const isStreaming = useIsStreaming();
-  const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage, setPendingInitialContext, setPendingContextGroup } = useChatActions();
+  const {
+    addUserMessage,
+    startStreaming,
+    appendStreamingContent,
+    finalizeAssistantMessage,
+    setMessages,
+    setPendingInitialContext,
+    setPendingContextGroup,
+  } = useChatActions();
   const { prependConversation } = useConversationHistoryActions();
 
   const isInitialized = useRef(false);
@@ -39,6 +50,8 @@ export default function Chat() {
     setPendingInitialContext('');
     setPendingContextGroup(null);
 
+    // 이전 대화 내역이 스토어에 남아 있을 수 있으므로 초기화 후 신규 메시지 추가
+    setMessages([]);
     addUserMessage(question);
     startStreaming();
 
@@ -62,6 +75,25 @@ export default function Chat() {
       },
     });
   }, []);
+
+  // contextGroupId 변경 시 재실행: 사이드바에서 다른 대화 클릭 시 해당 context_group_id 의 메시지만 복원
+  // pendingInitialContext 가 있는 경우(신규 채팅)에는 실행하지 않는다
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pendingInitialContext, setMessages 는 contextGroupId 변경에 반응할 필요 없어 의도적으로 제외
+  useEffect(() => {
+    if (pendingInitialContext || !contextGroupId) return;
+
+    // contextGroupId 전환 시 이전 대화 내역을 즉시 초기화
+    setMessages([]);
+    fetchContextsByGroupId(contextGroupId)
+      .then((contexts: ContextRecord[]) => {
+        const restoredMessages: ChatMessageType[] = contexts.flatMap(({ input_context, output_context }) => [
+          { id: crypto.randomUUID(), role: 'user' as const, content: input_context },
+          { id: crypto.randomUUID(), role: 'assistant' as const, content: output_context },
+        ]);
+        setMessages(restoredMessages);
+      })
+      .catch(console.error);
+  }, [contextGroupId]);
 
   // 스트리밍 중: instant(즉시 이동), 완료 후: smooth(부드럽게 이동)
   const bottomRef = useRef<HTMLDivElement>(null);

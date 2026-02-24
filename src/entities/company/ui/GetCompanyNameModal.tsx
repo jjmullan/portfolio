@@ -6,40 +6,54 @@
  * `companyName` 이 `null` 인 경우(= 최초 접근) 자동으로 모달이 열리며,
  * 외부 클릭 및 ESC 키로 닫히지 않아 반드시 입력을 완료해야 한다.
  * Zustand persist 의 하이드레이션 완료 후에만 렌더링하여 SSR/CSR 불일치를 방지한다.
+ * 회사명 입력 시 Supabase `company` 테이블에 INSERT 하고 반환된 `company_id` 를 전역 상태에 저장한다.
  */
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/shadcn/dialog';
-import { useCompanyName, useHasHydrated, useSetCompanyName } from '../../../shared/model/store/company';
+import { useState } from 'react';
+import { useCompanyActions, useCompanyName, useHasHydrated } from '../../../shared/model/store/company';
+import { insertCompany } from '../api/insertCompany';
 
 /**
  * 채용 담당자 회사명 입력 모달 컴포넌트.
  *
  * @description
  * - `companyName === null` 이면 모달이 자동으로 열린다.
- * - 회사명 입력 완료 또는 '공개하고 싶지 않아요' 선택 시 모달이 닫힌다.
- * - `'비공개'` 를 선택한 경우 이력서 다운로드 기능이 비활성화된다.
+ * - 회사명 입력 완료 시 `company` 테이블에 INSERT 후 `company_id` 를 전역 상태에 저장한다.
+ * - '공개하고 싶지 않아요' 선택 시 DB INSERT 없이 `companyName` 만 '비공개' 로 설정한다.
  * - 하이드레이션 전에는 `null` 을 반환하여 렌더링을 지연시킨다.
  */
 export default function GetCompanyNameModal() {
   const companyName = useCompanyName();
-  const setCompanyName = useSetCompanyName();
+  const { setCompanyName, setCompanyId } = useCompanyActions();
+  const hasHydrated = useHasHydrated();
+  const [isLoading, setIsLoading] = useState(false);
 
   // 하이드레이션이 완료된 후 렌더링하는 로직 추가
-  const hasHydrated = useHasHydrated();
   if (!hasHydrated) return null;
 
   /**
    * 회사명 폼 제출 핸들러.
+   * 입력값을 `company` 테이블에 INSERT 하고 반환된 `company_id` 를 전역 상태에 저장한다.
    * 입력값이 없거나 공백인 경우 실행하지 않는다.
    *
    * @param formData - 폼 데이터 (company-name 필드 포함)
    */
-  const handleSubmitCompanyName = (formData: FormData) => {
-    if (!formData.get('company-name')) return;
+  const handleSubmitCompanyName = async (formData: FormData) => {
+    const raw = formData.get('company-name') as string;
+    if (!raw?.trim()) return;
 
-    const value = formData.get('company-name') as string;
-    if (!value.trim()) return;
-    setCompanyName(value.trim());
+    const value = raw.trim();
+    setIsLoading(true);
+    try {
+      const companyId = await insertCompany({ company_name: value });
+      setCompanyId(companyId);
+      setCompanyName(value);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -64,18 +78,23 @@ export default function GetCompanyNameModal() {
             name="company-name"
             type="text"
             placeholder="회사명"
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full outline-none focus:border-gray-400"
+            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full outline-none focus:border-gray-400 disabled:bg-gray-50"
             autoFocus
             required
             maxLength={30}
+            disabled={isLoading}
           />
           <div className="flex flex-col gap-y-2">
-            <button type="submit" className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer w-full font-bold">
-              입력 완료
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer w-full font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoading ? '처리 중...' : '입력 완료'}
             </button>
             <button
               type="button"
-              className="bg-gray-100 rounded-lg px-4 py-2 text-sm text-black/80 cursor-pointer w-full"
+              disabled={isLoading}
+              className="bg-gray-100 rounded-lg px-4 py-2 text-sm text-black/80 cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => setCompanyName('비공개')}>
               공개하고 싶지 않아요
             </button>

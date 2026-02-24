@@ -8,7 +8,7 @@
  * Supabase INSERT 는 AI 응답 완료 후 `/chat` 페이지에서 처리한다.
  */
 
-import { useCompanyName } from '@shared/model/store/company';
+import { useCompanyId, useCompanyName } from '@shared/model/store/company';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
@@ -27,6 +27,7 @@ import { useChatActions } from '../../model/useChatStore';
  */
 export default function NewChatBox() {
   const companyName = useCompanyName();
+  const companyId = useCompanyId();
 
   // Context 입력창 변경 기능
   const [context, setContext] = useState<string>('');
@@ -75,7 +76,7 @@ export default function NewChatBox() {
     try {
       setPendingInitialContext(value);
       const subject = await summarizeContext(value);
-      const contextGroupId = await insertContextGroup({ company_name: companyName, subject });
+      const contextGroupId = await insertContextGroup({ company_id: companyId, subject });
       setPendingContextGroup({ id: contextGroupId, subject });
       router.push(`/chat?context=${contextGroupId}`);
     } catch (error) {

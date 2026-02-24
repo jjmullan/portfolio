@@ -8,6 +8,24 @@ export type Database = {
   };
   public: {
     Tables: {
+      company: {
+        Row: {
+          company_id: string;
+          company_name: string;
+          created_at: string;
+        };
+        Insert: {
+          company_id?: string;
+          company_name: string;
+          created_at?: string;
+        };
+        Update: {
+          company_id?: string;
+          company_name?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       context: {
         Row: {
           context_group_id: string;
@@ -42,27 +60,35 @@ export type Database = {
       };
       context_group: {
         Row: {
-          company_name: string | null;
+          company_id: string | null;
           context_group_id: string;
           created_at: string;
           subject: string;
           updated_at: string;
         };
         Insert: {
-          company_name?: string | null;
+          company_id?: string | null;
           context_group_id?: string;
           created_at?: string;
           subject?: string;
           updated_at?: string;
         };
         Update: {
-          company_name?: string | null;
+          company_id?: string | null;
           context_group_id?: string;
           created_at?: string;
           subject?: string;
           updated_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'context_group_company_id_fkey';
+            columns: ['company_id'];
+            isOneToOne: false;
+            referencedRelation: 'company';
+            referencedColumns: ['company_id'];
+          },
+        ];
       };
     };
     Views: {

@@ -55,6 +55,7 @@ type ChatActionType = {
   startStreaming(): void;
   appendStreamingContent(chunk: string): void;
   finalizeAssistantMessage(): void;
+  setMessages(messages: ChatMessageType[]): void;
   setPendingInitialContext(context: string): void;
   setPendingContextGroup(item: ConversationItem | null): void;
   reset(): void;
@@ -97,6 +98,9 @@ export const useChatStore = create(
             isStreaming: false,
             streamingContent: '',
           }));
+        },
+        setMessages: (messages: ChatMessageType[]) => {
+          set({ messages });
         },
         setPendingInitialContext: (context: string) => {
           set({ pendingInitialContext: context });

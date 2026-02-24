@@ -1,14 +1,23 @@
 // api
 export { fetchContextGroups } from './api/fetchContextGroups';
+export type { ContextRecord } from './api/fetchContextsByGroupId';
+export { fetchContextsByGroupId } from './api/fetchContextsByGroupId';
 export { insertContext } from './api/insertContext';
 export { insertContextGroup } from './api/insertContextGroup';
 export { sendMessage } from './api/sendMessage';
 export { summarizeContext } from './api/summarizeContext';
 
 // model
-export type { ChatMessageType } from './model/useChatStore';
-export { useChatActions, useChatMessages, useIsStreaming, usePendingContextGroup, usePendingInitialContext, useStreamingContent } from './model/useChatStore';
 export type { ConversationItem } from './model/types';
+export type { ChatMessageType } from './model/useChatStore';
+export {
+  useChatActions,
+  useChatMessages,
+  useIsStreaming,
+  usePendingContextGroup,
+  usePendingInitialContext,
+  useStreamingContent,
+} from './model/useChatStore';
 export { useConversationHistoryActions, useConversations } from './model/useConversationHistoryStore';
 
 // ui
