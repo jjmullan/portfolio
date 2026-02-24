@@ -30,6 +30,7 @@ export default function ListDownload({ href, image, title }: ListLinkType) {
       <a
         href={hasCompanyName ? href : ''}
         download={hasCompanyName ? true : undefined}
+        title={!hasCompanyName ? '회사명을 입력해야 다운로드할 수 있습니다.' : ''}
         onClick={(e) => {
           if (!hasCompanyName) {
             e.preventDefault();

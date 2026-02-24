@@ -37,6 +37,7 @@ export default function ListLink({ href, title, image, isInnerLink = false, isHi
       <Link
         href={disabled ? '' : href}
         target={`${isInnerLink ? '' : '_blank'}`}
+        title={disabled ? '회사명을 입력해야 접속할 수 있습니다.' : ''}
         rel="noopener noreferrer"
         className={`flex items-center gap-x-3 w-full h-9.5 ${disabled && 'cursor-not-allowed'}`}
         onClick={(e) => {
