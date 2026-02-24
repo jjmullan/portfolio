@@ -8,12 +8,14 @@
  * 스트리밍 중에는 입력창과 전송 버튼이 비활성화된다.
  */
 
+import { useCompanyId } from '@shared/model/store/company';
 import Image from 'next/image';
-import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
+import { type ChangeEvent, type KeyboardEvent, useEffect, useState } from 'react';
 import { insertContext } from '../../api/insertContext';
 import { sendMessage } from '../../api/sendMessage';
+import { validateContextOwnership } from '../../api/validateContextOwnership';
+import { useChatActions, useChatMessages, useIsStreaming } from '../../model/chat';
 import type { InProgressChatBoxType } from '../../model/types';
-import { useChatActions, useChatMessages, useIsStreaming } from '../../model/useChatStore';
 
 /**
  * 채팅 진행 중 메시지를 입력하고 전송하는 컴포넌트.
@@ -27,10 +29,24 @@ import { useChatActions, useChatMessages, useIsStreaming } from '../../model/use
  * @param props.contextGroupId - 현재 세션의 `context_group_id`. `context` 테이블 INSERT 시 외래 키로 사용된다.
  */
 export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxType) {
+  const companyId = useCompanyId();
   const [input, setInput] = useState('');
+  // 소유권 검증 전에 입력창이 잠깐 보이는 현상을 막기 위해 기본값을 false 로 설정
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const messages = useChatMessages();
   const isStreaming = useIsStreaming();
   const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage } = useChatActions();
+
+  // contextGroupId 또는 companyId 변경 시 소유권 재검증
+  useEffect(() => {
+    if (!contextGroupId || !companyId) return;
+    validateContextOwnership(contextGroupId, companyId)
+      .then(setIsAuthorized)
+      .catch(() => setIsAuthorized(false));
+  }, [contextGroupId, companyId]);
+
+  // 소유권 불일치 시 입력창 숨김
+  if (!isAuthorized) return null;
 
   /**
    * 메시지 전송을 처리하는 핸들러.
@@ -52,7 +68,8 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
       onDone: (fullResponse) => {
         finalizeAssistantMessage();
         insertContext({
-          context_group_id: contextGroupId,
+          // isAuthorized 가 true 인 시점에 contextGroupId 는 반드시 non-null
+          context_group_id: contextGroupId!,
           input_context: trimmed,
           output_context: fullResponse,
         }).catch(console.error);

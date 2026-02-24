@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 import { insertContextGroup } from '../../api/insertContextGroup';
 import { summarizeContext } from '../../api/summarizeContext';
-import { useChatActions } from '../../model/useChatStore';
+import { useChatActions } from '../../model/chat';
 
 /**
  * 새 채팅을 시작하는 메시지 입력 컴포넌트.

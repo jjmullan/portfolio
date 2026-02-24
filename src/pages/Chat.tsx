@@ -77,6 +77,7 @@ export default function Chat() {
   }, []);
 
   // contextGroupId 변경 시 재실행: 사이드바에서 다른 대화 클릭 시 해당 context_group_id 의 메시지만 복원
+  // 소유권 검증은 InProgressChatBox 에서 처리하며, 메시지는 소유 여부와 관계없이 표시한다
   // pendingInitialContext 가 있는 경우(신규 채팅)에는 실행하지 않는다
   // biome-ignore lint/correctness/useExhaustiveDependencies: pendingInitialContext, setMessages 는 contextGroupId 변경에 반응할 필요 없어 의도적으로 제외
   useEffect(() => {

@@ -10,7 +10,7 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useChatMessages, useIsStreaming, useStreamingContent } from '../../model/useChatStore';
+import { useChatMessages, useIsStreaming, useStreamingContent } from '../../model/chat';
 
 /**
  * 사용자가 보낸 메시지를 오른쪽 정렬로 표시하는 컴포넌트.

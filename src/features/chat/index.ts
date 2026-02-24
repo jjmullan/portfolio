@@ -6,19 +6,13 @@ export { insertContext } from './api/insertContext';
 export { insertContextGroup } from './api/insertContextGroup';
 export { sendMessage } from './api/sendMessage';
 export { summarizeContext } from './api/summarizeContext';
+export { validateContextOwnership } from './api/validateContextOwnership';
 
 // model
+export type { ChatMessageType } from './model/chat';
+export { useChatActions, useChatMessages, useIsStreaming, usePendingContextGroup, usePendingInitialContext, useStreamingContent } from './model/chat';
+export { useConversationHistoryActions, useConversations } from './model/conversationHistory';
 export type { ConversationItem } from './model/types';
-export type { ChatMessageType } from './model/useChatStore';
-export {
-  useChatActions,
-  useChatMessages,
-  useIsStreaming,
-  usePendingContextGroup,
-  usePendingInitialContext,
-  useStreamingContent,
-} from './model/useChatStore';
-export { useConversationHistoryActions, useConversations } from './model/useConversationHistoryStore';
 
 // ui
 export { default as InProgressChatBox } from './ui/chatbox/InProgressChatBox';

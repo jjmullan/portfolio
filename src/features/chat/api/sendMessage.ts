@@ -4,7 +4,7 @@
  * `/api/chat` Route Handler 에 POST 요청을 보내고, `ReadableStream` 으로 응답을 청크 단위로 수신한다.
  */
 
-import type { ChatMessageType } from '../model/useChatStore';
+import type { ChatMessageType } from '../model/chat';
 
 /**
  * `sendMessage` 함수에 전달하는 파라미터 타입.
