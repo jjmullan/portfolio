@@ -1,9 +1,8 @@
 'use client';
 
+import { RandomPromptList } from '@entities/subject';
 import { NewChatBox } from '@features/chat';
 import { useCompanyName } from '@shared/model/store/company';
-
-import Link from 'next/link';
 
 export default function Home() {
   const companyName = useCompanyName();
@@ -18,15 +17,7 @@ export default function Home() {
           <p>프론트엔드 신입 개발자 최영준입니다</p>
         </div>
         <ul className="flex gap-1.5">
-          <li className="px-3 py-2 text-xs bg-gray-50 rounded-full">
-            <Link href={`/chat?context=`}>질문 1</Link>
-          </li>
-          <li className="px-3 py-2 text-xs bg-gray-50 rounded-full">
-            <Link href={`/chat?context=`}>질문 2</Link>
-          </li>
-          <li className="px-3 py-2 text-xs bg-gray-50 rounded-full">
-            <Link href={`/chat?context=`}>질문 3</Link>
-          </li>
+          <RandomPromptList />
         </ul>
       </div>
       <NewChatBox />
