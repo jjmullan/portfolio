@@ -1,15 +1,12 @@
 'use client';
 
+import { type ContextRecord, fetchContextsByGroupId, insertContext, useConversationHistoryActions } from '@entities/conversation';
 import {
   ChatMessageList,
   type ChatMessageType,
-  type ContextRecord,
-  fetchContextsByGroupId,
   InProgressChatBox,
-  insertContext,
   sendMessage,
   useChatActions,
-  useConversationHistoryActions,
   useIsStreaming,
   usePendingContextGroup,
   usePendingInitialContext,

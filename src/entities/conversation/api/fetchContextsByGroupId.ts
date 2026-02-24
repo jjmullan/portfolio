@@ -5,15 +5,7 @@
  */
 
 import { supabase } from '@shared/lib/supabase/supabaseClient';
-
-/**
- * 단일 대화 기록 항목 타입.
- * `context` 테이블의 input/output 쌍을 나타낸다.
- */
-export type ContextRecord = {
-  input_context: string;
-  output_context: string;
-};
+import type { ContextRecord } from '../model/types';
 
 /**
  * `context_group_id` 에 해당하는 대화 기록을 오래된 순으로 조회한다.

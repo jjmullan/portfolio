@@ -8,11 +8,11 @@
  * Supabase INSERT 는 AI 응답 완료 후 `/chat` 페이지에서 처리한다.
  */
 
+import { insertContextGroup } from '@entities/conversation';
 import { useCompanyId, useCompanyName } from '@shared/model/store/company';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
-import { insertContextGroup } from '../../api/insertContextGroup';
 import { summarizeContext } from '../../api/summarizeContext';
 import { useChatActions } from '../../model/chat';
 

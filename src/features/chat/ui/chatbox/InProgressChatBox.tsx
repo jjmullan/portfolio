@@ -8,12 +8,11 @@
  * 스트리밍 중에는 입력창과 전송 버튼이 비활성화된다.
  */
 
+import { insertContext, validateContextOwnership } from '@entities/conversation';
 import { useCompanyId } from '@shared/model/store/company';
 import Image from 'next/image';
 import { type ChangeEvent, type KeyboardEvent, useEffect, useState } from 'react';
-import { insertContext } from '../../api/insertContext';
 import { sendMessage } from '../../api/sendMessage';
-import { validateContextOwnership } from '../../api/validateContextOwnership';
 import { useChatActions, useChatMessages, useIsStreaming } from '../../model/chat';
 import type { InProgressChatBoxType } from '../../model/types';
 

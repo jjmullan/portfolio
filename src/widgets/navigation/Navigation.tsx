@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchContextGroups, useConversationHistoryActions, useConversations } from '@features/chat';
+import { fetchContextGroups, useConversationHistoryActions, useConversations } from '@entities/conversation';
 import { useCompanyId } from '@shared/model/store/company';
 import ListDownload from '@shared/ui/li/ListDownload';
 import ListLink from '@shared/ui/li/ListLink';

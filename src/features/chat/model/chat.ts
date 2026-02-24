@@ -5,9 +5,9 @@
  * devtools 미들웨어를 통해 브라우저 Redux DevTools 에서 상태를 확인할 수 있다.
  */
 
+import type { ConversationItem } from '@entities/conversation';
 import { create } from 'zustand';
 import { combine, devtools } from 'zustand/middleware';
-import type { ConversationItem } from './types';
 
 /**
  * 채팅 메시지 단일 항목의 타입.

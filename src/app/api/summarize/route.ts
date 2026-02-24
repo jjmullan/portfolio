@@ -21,7 +21,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const subject = message.content[0].type === 'text' ? message.content[0].text.trim() : prompt.slice(0, 30);
+  const subject = message.content[0]?.type === 'text' ? message.content[0].text.trim() : prompt.slice(0, 30);
 
   return new Response(subject, {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
