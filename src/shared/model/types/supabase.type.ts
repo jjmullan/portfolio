@@ -33,21 +33,21 @@ export type Database = {
         Row: {
           company_name: string | null;
           context_group_id: string;
-          context_id: string;
+          context_id: string | null;
           created_at: string;
           updated_at: string | null;
         };
         Insert: {
           company_name?: string | null;
           context_group_id?: string;
-          context_id?: string;
+          context_id?: string | null;
           created_at?: string;
           updated_at?: string | null;
         };
         Update: {
           company_name?: string | null;
           context_group_id?: string;
-          context_id?: string;
+          context_id?: string | null;
           created_at?: string;
           updated_at?: string | null;
         };

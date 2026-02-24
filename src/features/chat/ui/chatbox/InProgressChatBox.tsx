@@ -10,8 +10,8 @@
 
 import Image from 'next/image';
 import { type ChangeEvent, type KeyboardEvent, useState } from 'react';
+import { insertContext } from '../../api/insertContext';
 import { sendMessage } from '../../api/sendMessage';
-import type { InProgressChatBoxType } from '../../model/types';
 import { useChatActions, useChatMessages, useIsStreaming } from '../../model/useChatStore';
 
 /**
@@ -21,11 +21,9 @@ import { useChatActions, useChatMessages, useIsStreaming } from '../../model/use
  * - Enter 키로 메시지를 전송하고, Shift+Enter 로 줄바꿈을 입력한다.
  * - 전송 시 `useChatStore` 액션을 통해 사용자 메시지를 추가하고 스트리밍을 시작한다.
  * - `sendMessage` API 를 통해 대화 히스토리를 포함한 메시지를 Claude AI 에 전달한다.
- * - 응답 완료 시 `onMessageSent` 콜백으로 input/output 텍스트를 상위에 전달한다.
- *
- * @param props.onMessageSent - AI 응답 완료 시 호출되는 콜백 (입력 텍스트, 전체 응답 텍스트)
+ * - 응답 완료 시 `insertContext` 를 직접 호출하여 `context` 테이블에 I/O 데이터를 저장한다.
  */
-export default function InProgressChatBox({ onMessageSent }: InProgressChatBoxType) {
+export default function InProgressChatBox() {
   const [input, setInput] = useState('');
   const messages = useChatMessages();
   const isStreaming = useIsStreaming();
@@ -50,7 +48,10 @@ export default function InProgressChatBox({ onMessageSent }: InProgressChatBoxTy
       onChunk: appendStreamingContent,
       onDone: (fullResponse) => {
         finalizeAssistantMessage();
-        onMessageSent(trimmed, fullResponse);
+        insertContext({
+          input_context: trimmed,
+          output_context: fullResponse,
+        }).catch(console.error);
       },
       onError: () => {
         finalizeAssistantMessage();
@@ -89,8 +90,8 @@ export default function InProgressChatBox({ onMessageSent }: InProgressChatBoxTy
         placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
         rows={1}
-        // disabled={isStreaming}
-        disabled={true}
+        disabled={isStreaming}
+        // disabled={true}
       />
       <button
         type="submit"

@@ -12,6 +12,8 @@ import { useCompanyName } from '@shared/model/store/company';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
+import { insertContextGroup } from '../../api/insertContextGroup';
+import { useChatActions } from '../../model/useChatStore';
 
 /**
  * 새 채팅을 시작하는 메시지 입력 컴포넌트.
@@ -53,20 +55,30 @@ export default function NewChatBox() {
   // Supabase INSERT 는 /chat 에서 응답 완료 후 input + output 을 함께 처리한다.
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { setPendingInitialContext } = useChatActions();
 
   /**
-   * 폼 제출 핸들러. 입력값을 URL 쿼리 파라미터로 인코딩하여 `/chat` 으로 이동한다.
+   * 폼 제출 핸들러.
+   * `context_group` 테이블에 새 레코드를 생성한 뒤,
+   * 반환된 `context_group_id` 를 `context` 쿼리 파라미터로 `/chat` 에 전달한다.
    * 입력값이 없으면 실행하지 않는다.
    *
    * @param formData - 폼 데이터 (context 필드 포함)
    */
-  const handleRequestContext = (formData: FormData) => {
-    if (!formData.get('context')) return;
+  const handleRequestContext = async (formData: FormData) => {
+    const value = formData.get('context') as string;
+    if (!value) return;
 
     setIsLoading(true);
-    const value = formData.get('context') as string;
-    router.push(`/chat?context=${encodeURIComponent(value)}`);
-    setIsLoading(false);
+    try {
+      setPendingInitialContext(value);
+      const contextGroupId = await insertContextGroup({ company_name: companyName });
+      router.push(`/chat?context=${contextGroupId}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   /**
@@ -102,8 +114,8 @@ export default function NewChatBox() {
         onKeyDown={handleKeyDown}
         tabIndex={0}
         rows={1}
-        // disabled={isLoading}
-        disabled={true}
+        disabled={isLoading}
+        // disabled={true}
       />
       <button
         type="submit"
