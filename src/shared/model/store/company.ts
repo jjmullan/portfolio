@@ -11,7 +11,7 @@ import { combine, createJSONStorage, devtools, persist } from 'zustand/middlewar
 /**
  * 회사 스토어의 상태(State) 타입.
  *
- * @property company_id - Supabase `company` 테이블의 PK. `null` 이면 미삽입 상태 ('비공개' 포함).
+ * @property company_id - Supabase `company` 테이블의 PK. `null` 이면 미삽입 상태. sessionStorage 에 persist 된다.
  * @property companyName - 채용 담당자가 입력한 회사명. `null` 이면 최초 접근으로 판단한다.
  * @property _hasHydrated - sessionStorage 에서 상태 복원(하이드레이션) 완료 여부
  */
@@ -68,7 +68,7 @@ export const useCompanyNameStore = create(
         name: 'CompanyNameStore',
         storage: createJSONStorage(() => sessionStorage),
         partialize: (state) => ({
-          // company_id: state.company_id,
+          company_id: state.company_id,
           companyName: state.companyName,
         }),
         onRehydrateStorage: () => (state) => {
