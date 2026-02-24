@@ -64,7 +64,12 @@ export async function POST(request: NextRequest): Promise<Response> {
         }
         controller.close();
       } catch (error) {
-        const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다';
+        let message = '죄송합니다. 잠시 후 다시 시도해주세요.';
+        if (error instanceof Anthropic.APIError) {
+          if (error.status === 529) message = '현재 AI 서버가 혼잡합니다. 잠시 후 다시 시도해주세요.';
+          else if (error.status === 429) message = '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.';
+          else if (error.status === 401) message = 'API 인증에 실패했습니다. 관리자에게 문의해주세요.';
+        }
         controller.enqueue(encoder.encode(`${STREAM_ERROR_PREFIX}${message}`));
         controller.close();
       }

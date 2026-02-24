@@ -26,6 +26,7 @@ export default function Chat() {
     addUserMessage,
     startStreaming,
     appendStreamingContent,
+    setStreamingContent,
     finalizeAssistantMessage,
     setMessages,
     setPendingInitialContext,
@@ -67,7 +68,8 @@ export default function Chat() {
         // 스트리밍 완료 시 사이드바 최근 대화 내역에 추가
         if (contextGroup) prependConversation(contextGroup);
       },
-      onError: () => {
+      onError: (error) => {
+        setStreamingContent(error.message);
         finalizeAssistantMessage();
       },
     });

@@ -34,7 +34,7 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
   const [isAuthorized, setIsAuthorized] = useState(false);
   const messages = useChatMessages();
   const isStreaming = useIsStreaming();
-  const { addUserMessage, startStreaming, appendStreamingContent, finalizeAssistantMessage } = useChatActions();
+  const { addUserMessage, startStreaming, appendStreamingContent, setStreamingContent, finalizeAssistantMessage } = useChatActions();
 
   // contextGroupId 또는 companyId 변경 시 소유권 재검증
   useEffect(() => {
@@ -73,7 +73,8 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
           output_context: fullResponse,
         }).catch(console.error);
       },
-      onError: () => {
+      onError: (error) => {
+        setStreamingContent(error.message);
         finalizeAssistantMessage();
       },
     });
