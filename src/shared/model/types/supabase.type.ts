@@ -11,17 +11,17 @@ export type Database = {
       company: {
         Row: {
           company_id: string;
-          company_name: string;
+          company_name: string | null;
           created_at: string;
         };
         Insert: {
           company_id?: string;
-          company_name: string;
+          company_name?: string | null;
           created_at?: string;
         };
         Update: {
           company_id?: string;
-          company_name?: string;
+          company_name?: string | null;
           created_at?: string;
         };
         Relationships: [];
@@ -60,21 +60,21 @@ export type Database = {
       };
       context_group: {
         Row: {
-          company_id: string | null;
+          company_id: string;
           context_group_id: string;
           created_at: string;
           subject: string;
           updated_at: string;
         };
         Insert: {
-          company_id?: string | null;
+          company_id?: string;
           context_group_id?: string;
           created_at?: string;
           subject?: string;
           updated_at?: string;
         };
         Update: {
-          company_id?: string | null;
+          company_id?: string;
           context_group_id?: string;
           created_at?: string;
           subject?: string;
