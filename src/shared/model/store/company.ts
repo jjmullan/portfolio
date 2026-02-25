@@ -16,8 +16,8 @@ import { combine, createJSONStorage, devtools, persist } from 'zustand/middlewar
  * @property _hasHydrated - sessionStorage 에서 상태 복원(하이드레이션) 완료 여부
  */
 type CompanyNameType = {
-  company_id: string | null;
-  companyName: string | null;
+  company_id: string | null | undefined;
+  companyName: string | null | undefined;
   _hasHydrated: boolean;
 };
 
@@ -35,8 +35,8 @@ type CompanyNameActionType = {
 };
 
 const initialState: CompanyNameType = {
-  company_id: null,
-  companyName: null,
+  company_id: undefined,
+  companyName: undefined,
   _hasHydrated: false,
 };
 
