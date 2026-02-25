@@ -2,7 +2,6 @@
 
 import { fetchContextGroups, useConversationHistoryActions, useConversations } from '@entities/conversation';
 import { useCompanyId } from '@shared/model/store/company';
-import ListDownload from '@shared/ui/li/ListDownload';
 import ListLink from '@shared/ui/li/ListLink';
 import H2 from '@shared/ui/title/H2';
 import Image from 'next/image';
@@ -16,7 +15,7 @@ export default function Navigation() {
 
   // companyId 변경 시 해당 company 의 최근 대화 내역만 로드. companyId 가 null 이면 빈 배열 반환
   useEffect(() => {
-    fetchContextGroups(companyId).then(setConversations).catch(console.error);
+    fetchContextGroups(companyId!).then(setConversations).catch(console.error);
   }, [companyId, setConversations]);
   const toggleMenuOnOff = () => {
     setToggleMenu((state) => !state);
@@ -50,15 +49,15 @@ export default function Navigation() {
               <ListLink href="https://www.linkedin.com/in/jjmullan" image="linkedin" title="LinkedIn" />
               {/* <ListLink href="https://jjmullan.slack.com/" image="slack" title="Slack" /> */}
               <ListLink href="https://www.instagram.com/choiyoungjune/" image="instagram" title="Instagram" />
+              <ListLink href="https://drive.google.com/drive/folders/1MG7HggVtEdWywLOnap-e5yxJZ3k0SAVa" image="googledrive" title="Google Drive" />
             </ul>
           </div>
-          <div>
+          {/* <div>
             <H2 title="파일 다운로드" isHidden={!toggleMenu} />
             <ul className="flex flex-col">
-              <ListLink href="https://drive.google.com/drive/folders/1MG7HggVtEdWywLOnap-e5yxJZ3k0SAVa" image="googledrive" title="Google Drive" />
               <ListDownload href="/resume/resume.zip" image="pdf" title="PDF" />
             </ul>
-          </div>
+          </div> */}
           <div>
             <H2 title="최근 대화 내역" isHidden={!toggleMenu} />
             <ul className="flex flex-col">
