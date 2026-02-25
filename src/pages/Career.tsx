@@ -184,7 +184,7 @@ const CAREER_ITEMS: CareerItem[] = [
 
 export default function Career() {
   return (
-    <div className="w-full max-w-[640px] px-10 py-12">
+    <div className="w-full max-w-layout px-10 py-12">
       <h2 className="sr-only">이력</h2>
 
       <ul className="relative">
