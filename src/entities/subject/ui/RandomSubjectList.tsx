@@ -44,7 +44,7 @@ export default function RandomSubjectList() {
   return (
     <>
       {subjects.map(({ context_group_id, subject }) => (
-        <li key={context_group_id} className="px-3 py-2 text-xs w-full max-w-[160px] bg-gray-50 rounded-full truncate">
+        <li key={context_group_id} className="px-3 py-2 text-xs max-w-[166px] bg-gray-50 rounded-full truncate">
           <Link href={`/chat?context=${context_group_id}`}>{subject}</Link>
         </li>
       ))}
