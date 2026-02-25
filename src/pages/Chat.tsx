@@ -107,7 +107,7 @@ export default function Chat() {
         <ChatMessageList />
         <div ref={bottomRef} />
       </div>
-      <div className="fixed bottom-0 pb-4 w-full max-w-layout bg-white/80 backdrop-blur-sm">
+      <div className="fixed bottom-0 pb-4 w-full max-w-[640px] bg-white/80 backdrop-blur-sm">
         <InProgressChatBox contextGroupId={contextGroupId ?? null} />
       </div>
     </div>
