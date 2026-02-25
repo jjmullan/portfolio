@@ -103,7 +103,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col w-full max-w-layout px-10 py-8 min-h-screen">
-      <div className="flex-1 pb-8">
+      <div className="flex-1 pb-24">
         <ChatMessageList />
         <div ref={bottomRef} />
       </div>
