@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { type ChangeEvent, type KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 import { summarizeContext } from '../../api/summarizeContext';
 import { useChatActions } from '../../model/chat';
+import { EXAMPLE } from '../../model/constants';
 
 /**
  * 새 채팅을 시작하는 메시지 입력 컴포넌트.
@@ -28,6 +29,8 @@ import { useChatActions } from '../../model/chat';
 export default function NewChatBox() {
   const companyName = useCompanyName();
   const companyId = useCompanyId();
+
+  const [placeholder] = useState(() => EXAMPLE[Math.floor(Math.random() * EXAMPLE.length)]!.title);
 
   // Context 입력창 변경 기능
   const [context, setContext] = useState<string>('');
@@ -114,7 +117,7 @@ export default function NewChatBox() {
         value={context}
         onChange={handleChangeContext}
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
-        placeholder={`예시: ${companyName}의 프론트엔드 공고에 적합한 인재인가요?`}
+        placeholder={placeholder}
         aria-label={context ? `${context} 검색` : '검색'}
         onKeyDown={handleKeyDown}
         tabIndex={0}
