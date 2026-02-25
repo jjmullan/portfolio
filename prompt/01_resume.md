@@ -3,9 +3,10 @@
 ## 본인 소개
 
 - 이름: 최영준
-- 설명: 기획력과 실행력을 갖춘 프론트엔드 개발자
+- 한 줄 소개: 기획력과 실행력을 갖춘 프론트엔드 개발자
+- 생년월일: 1994년 2월 4일
 - 이메일: jjmullan24@gmail.com
-- 주요 링크
+- 링크
   - GitHub: https://github.com/jjmullan?tab=repositories
   - LinedIn: https://www.linkedin.com/in/jjmullan
   - Instagram: https://www.instagram.com/choiyoungjune/
