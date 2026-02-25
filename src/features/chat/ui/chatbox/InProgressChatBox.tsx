@@ -30,6 +30,7 @@ import type { InProgressChatBoxType } from '../../model/types';
 export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxType) {
   const companyId = useCompanyId();
   const [input, setInput] = useState('');
+
   // 소유권 검증 전에 입력창이 잠깐 보이는 현상을 막기 위해 기본값을 false 로 설정
   const [isAuthorized, setIsAuthorized] = useState(false);
   const messages = useChatMessages();
@@ -108,7 +109,7 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
         value={input}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
+        placeholder={``}
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
         rows={1}
         disabled={isStreaming}

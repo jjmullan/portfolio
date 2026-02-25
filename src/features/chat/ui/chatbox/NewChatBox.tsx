@@ -76,7 +76,7 @@ export default function NewChatBox() {
     try {
       setPendingInitialContext(value);
       const subject = await summarizeContext(value);
-      const contextGroupId = await insertContextGroup({ company_id: companyId, subject });
+      const contextGroupId = await insertContextGroup({ company_id: companyId!, subject });
       setPendingContextGroup({ id: contextGroupId, subject });
       router.push(`/chat?context=${contextGroupId}`);
     } catch (error) {
@@ -114,7 +114,7 @@ export default function NewChatBox() {
         value={context}
         onChange={handleChangeContext}
         className="py-4 pl-4 pr-12 border border-gray-200 rounded-lg w-full text-sm placeholder:text-sm shadow-md resize-none disabled:bg-gray-50"
-        placeholder="메시지를 입력하세요 (Enter 전송 / Shift+Enter 줄바꿈)"
+        placeholder={`예시: ${companyName}의 프론트엔드 공고에 적합한 인재인가요?`}
         aria-label={context ? `${context} 검색` : '검색'}
         onKeyDown={handleKeyDown}
         tabIndex={0}

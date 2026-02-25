@@ -37,7 +37,7 @@ export default function GetCompanyNameModal() {
    *
    * @param value - INSERT 할 회사명 문자열
    */
-  const handleInsertCompany = async (value: string) => {
+  const handleInsertCompany = async (value: string | null) => {
     setIsLoading(true);
     try {
       const companyId = await insertCompany({ company_name: value });
@@ -101,7 +101,7 @@ export default function GetCompanyNameModal() {
               type="button"
               disabled={isLoading}
               className="bg-gray-100 rounded-lg px-4 py-2 text-sm text-black/80 cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={() => handleInsertCompany('비공개')}>
+              onClick={() => handleInsertCompany(null)}>
               공개하고 싶지 않아요
             </button>
           </div>
