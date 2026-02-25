@@ -28,7 +28,7 @@ import { Activity } from 'react';
  */
 export default function ListLink({ href, title, image, isInnerLink = false, isHidden = false }: ListInnerLinkType) {
   const companyName = useCompanyName();
-  const hasCompanyName = companyName !== '비공개';
+  const hasCompanyName = companyName !== null;
   const isGoogleDrive = title === 'Google Drive';
   const disabled = !hasCompanyName && isGoogleDrive;
 

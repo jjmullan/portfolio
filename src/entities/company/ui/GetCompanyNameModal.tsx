@@ -63,8 +63,8 @@ export default function GetCompanyNameModal() {
   };
 
   return (
-    // companyName 이 null 이면 최초 접근으로 판단하여 모달 자동 팝업
-    <Dialog open={companyName === null}>
+    // companyName 이 undefined 이면 최초 접근으로 판단하여 모달 자동 팝업
+    <Dialog open={companyName === undefined}>
       <DialogContent
         // 외부 클릭 및 ESC 키로 모달이 닫히지 않도록 방지
         onInteractOutside={(e) => e.preventDefault()}

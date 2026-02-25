@@ -23,7 +23,7 @@ import Image from 'next/image';
  */
 export default function ListDownload({ href, image, title }: ListLinkType) {
   const companyName = useCompanyName();
-  const hasCompanyName = companyName !== '비공개';
+  const hasCompanyName = companyName !== null;
 
   return (
     <li className="px-2 hover:bg-gray-100 rounded-md">
