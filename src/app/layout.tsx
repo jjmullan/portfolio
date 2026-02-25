@@ -61,7 +61,10 @@ export default function RootLayout({
           <main className="overflow-y-scroll flex flex-col items-center w-full">{children}</main>
 
           {/* 업데이트 */}
-          <p className="fixed bottom-3 right-4 text-[10px] text-black/50 font-semibold">updated 2026. 2. 24</p>
+          <div className="fixed bottom-3 right-4 text-[10px] text-black/50 font-semibold">
+            <p className="text-right">Haiku 4.5</p>
+            <p>updated 2026. 2. 24</p>
+          </div>
         </div>
         <div></div>
       </body>
