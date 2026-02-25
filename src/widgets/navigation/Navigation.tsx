@@ -49,7 +49,7 @@ export default function Navigation() {
               <ListLink href="https://www.linkedin.com/in/jjmullan" image="linkedin" title="LinkedIn" />
               {/* <ListLink href="https://jjmullan.slack.com/" image="slack" title="Slack" /> */}
               <ListLink href="https://www.instagram.com/choiyoungjune/" image="instagram" title="Instagram" />
-              <ListLink href="https://drive.google.com/drive/folders/1MG7HggVtEdWywLOnap-e5yxJZ3k0SAVa" image="googledrive" title="Google Drive" />
+              <ListLink href="https://drive.google.com/drive/folders/1MG7HggVtEdWywLOnap-e5yxJZ3k0SAVa" image="googledrive" title="File Download" />
             </ul>
           </div>
           {/* <div>

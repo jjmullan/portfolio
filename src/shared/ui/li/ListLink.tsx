@@ -29,7 +29,7 @@ import { Activity } from 'react';
 export default function ListLink({ href, title, image, isInnerLink = false, isHidden = false }: ListInnerLinkType) {
   const companyName = useCompanyName();
   const hasCompanyName = companyName !== null;
-  const isGoogleDrive = title === 'Google Drive';
+  const isGoogleDrive = title === 'File Download';
   const disabled = !hasCompanyName && isGoogleDrive;
 
   return (
