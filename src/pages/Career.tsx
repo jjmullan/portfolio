@@ -144,12 +144,7 @@ const CAREER_ITEMS: CareerItem[] = [
     category: 'work',
     descriptions: ['인스타그램, 네이버 스마트플레이스 채널 관리', '온라인 홍보 콘텐츠 기획 및 제작'],
   },
-  {
-    period: '2012. 3 ~ 2020. 2',
-    title: '강남대학교',
-    category: 'education',
-    descriptions: ['경영학 전공, 사회사업학 부전공', '학점 3.63 / 4.5', '교내 서포터즈 활동 1회, 교내 개인 공모전 3회 수상'],
-  },
+
   {
     period: '2019. 8',
     title: '컴퓨터활용능력 2급',
@@ -173,6 +168,12 @@ const CAREER_ITEMS: CareerItem[] = [
     title: 'ITQ 엑셀/파워포인트 A급',
     category: 'certificate',
     descriptions: ['Excel, PowerPoint 를 활용한 데이터 관리 능력 향상'],
+  },
+  {
+    period: '2012. 3 ~ 2020. 2',
+    title: '강남대학교',
+    category: 'education',
+    descriptions: ['경영학 전공, 사회사업학 부전공', '학점 3.63 / 4.5', '교내 서포터즈 활동 1회, 교내 개인 공모전 3회 수상'],
   },
   {
     period: '2009. 3 ~ 2012. 2',
