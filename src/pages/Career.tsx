@@ -129,7 +129,7 @@ const CAREER_ITEMS: CareerItem[] = [
   },
   {
     period: '2021. 4 ~ 2021. 7',
-    title: '제20회 대단한 단편영화제 홍보 담당',
+    title: '제20회 미쟝센 단편영화제 홍보 담당',
     category: 'work',
     descriptions: [
       '공식 홈페이지, 인스타그램, X(트위터), 페이스북, 네이버 TV 채널 관리',
