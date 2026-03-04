@@ -1,308 +1,209 @@
-# 프로젝트
+# 1. 포트폴리오
 
-## [개인] 포트폴리오
+## 링크
 
-- 학습된 컨텍스트를 기반으로 맞춤형 정보를 전달하는 AI Agent 포트폴리오
+[Service](https://jjmullan.vercel.app/)
 
-### Outline
+## 특징
 
-- 기간: 2026. 2. 18 ~
-- 스킬
-  - 프레임워크: Vite, TypeScript, React.js, Next.js
-  - 핵심 라이브러리: @anthropic-ai/sdk, @next/third-parties
-  - 주요 라이브러리: React-markdown, Remark-gfm, Zustand, Biome, Tailwind CSS, Shadcn
-  - 배포: Vercel
-  - 문서: Notion
-  - Data: Supabase, Google Analytics
-  - DX: Claude Code, Codex, Notion MCP, Supabase MCP, Vercel MCP, Github MCP, Slack, Discord
-- 관련 링크: [Service](https://jjmullan.vercel.app/), [Github](https://github.com/jjmullan/portfolio)
+학습된 컨텍스트를 기반으로 맞춤형 정보를 실시간으로 스트리밍하여 전달하는 것이 특징인 **AI Agent 포트폴리오**
 
-### ERD
+## 기술 경험
 
-```mermaid
-erDiagram
+### 1. Claude AI SDK 기반 스트리밍 응답 구현
 
-    company {
-        uuid company_id PK
-        text company_name
-        timestamptz created_at
-    }
+- Next.js Route Handler 와 Anthropic SDK 를 결합하여 AI 응답을 청크 단위로 클라이언트에 전달하는 스트리밍 파이프라인 구축
+- Anthropic Prompt Caching 설정으로 시스템 프롬프트를 Anthropic 서버에 5분간 캐싱하여 반복 요청의 토큰 비용을 최대 90% 절감
+- AI 모델을 다운그레이드(Sonnet 4.6 → Haiku 4.5)하여 응답 퀄리티는 유지하면서 토큰 사용 비용을 약 73% 절감($3/1M → $0.8/1M)
+- 'server-only' 서버 함수가 컨텍스트 Markdown 파일을 동적 로드하여 프롬프트를 출력하는 구조로 설계하여 코드 변경 없이 프롬프트를 즉시 업데이트 가능
+- 스트리밍 중 커서 애니메이션 제공, 오류 상황 발생 시 오류 코드에 맞는 메시지 즉시 제공 등으로 UX 개선
 
-    context_group {
-        uuid context_group_id PK
-        uuid company_id FK
-        timestamptz created_at
-        timestamp updated_at
-        text subject
-    }
+### 2. MCP 기반 AI 개발 워크플로우 자동화
 
-    context {
-        uuid context_id PK
-        text input_context
-        timestamptz created_at
-        text output_context
-        uuid context_group_id FK
-    }
+- Claude Code 에 Notion, Github, Vercel, Supabase MCP 를 연결하여 코드·문서·DB·배포를 단일 워크플로우로 통합하고 반복적인 컨텍스트 전환 비용을 제거
 
-    company ||--o{ context_group : has
-    context_group ||--o{ context : contains
-```
+### 3. 정합성을 고려한 Database Insert 시점 설계
 
-### Technical Experience
+- AI 응답 완료 이후에만 I/O 데이터를 INSERT 하도록 시점을 분리하여 NOT NULL 제약 위반 없이 데이터 정합성을 구조적으로 확보
 
-1. Claude AI SDK 기반 스트리밍 응답 구현
+## 문제 해결
 
-- Next.js Route Handler 에서 Anthropic SDK 를 결합하여 AI 응답을 청크 단위로 클라이언트에 전달하는 스트리밍 파이프라인 구축
-- 스트리밍 도중 에러 발생 시 HTTP 상태 코드를 변경할 수 없는 제약을 고려하여, `[STREAM_ERROR]:` 접두사를 스트림에 삽입하는 방식으로 클라이언트가 에러를 식별하도록 설계
-- `react-markdown` + `remark-gfm` 으로 AI 응답을 GitHub Flavored Markdown 으로 실시간 렌더링하고, 스트리밍 중 커서 애니메이션으로 UX 개선
+### 1. 권한 검증 구조 개선을 통한 링크 공유 UX 확보
 
-2. Anthropic Prompt Caching 으로 API 비용 최적화
+- **문제**: Database SELECT 권한을 페이지 진입 시점에 검증하는 구조로 인해 AI 대화 내역을 링크로 공유하거나 다른 기기에서 다시 열 수 없는 문제
+- **해결**: URL 접근 시에는 권한 검증 없이 SELECT 를 허용하여 대화 내용을 조회할 수 있도록 하고, 별도로 소유자 세션 여부를 검증하여 소유자에게만 프롬프트 입력 UI와 INSERT 권한을 제공하도록 설계
+- **성과**: 대화 내역을 링크로 공유할 수 있는 UX 를 구현하여 포트폴리오 서비스 접근성과 사용성을 개선
 
-- `cache_control: { type: 'ephemeral' }` 설정으로 시스템 프롬프트를 Anthropic 서버에 5분간 캐싱하여 반복 요청의 토큰 비용을 최대 90% 절감
-- 포트폴리오 데이터를 TypeScript 상수 대신 역할별 Markdown 파일(`01_resume`, `02_project` 등)로 분리하고, `server-only` 가 적용된 `loadAllTemplates()` 로 동적 로드하여 코드 변경 없이 프롬프트 내용 관리가 가능하도록 설계
+### 2. 트리거 기반 자동 갱신 구조 설계를 통한 데이터 정합성 확보
 
-3. Zustand sessionStorage Persist 기반 SSR/CSR 하이드레이션 불일치 방지
+- **문제**: Supabase Anon 키 환경에서 RLS 정책으로 인해 updated_at 컬럼 갱신이 허용되지 않아 데이터 변경 이력을 정확히 반영하지 못하는 문제
+- **해결**: 자식 테이블에 INSERT 가 발생할 때 외래 키로 연결된 부모 테이블 레코드의 updated_at 값을 now()로 자동 갱신하는 트리거를 구현
+- **성과**: 클라이언트 의존성을 제거하고 데이터 변경 이력의 신뢰성을 확보
 
-- 채용 담당자의 `company_id`, `companyName` 을 `sessionStorage` 에 persist 하여 페이지 새로고침 후에도 세션 단위 상태를 유지
-- `_hasHydrated` 플래그와 `onRehydrateStorage` 콜백을 활용하여 sessionStorage 복원 완료 후에만 모달을 렌더링함으로써 SSR 환경에서의 하이드레이션 불일치 방지
+### 3. AI 프롬프트 최적화로 응답 정확도와 일관성 향상
 
-4. Supabase RLS 정책 및 DB 트리거 설계
+- **상황**: 개인 경험에 맞는 정보를 응답하도록 구현하는 과정에서 AI가 실제 경험과 일치하지 않는 성과를 생성하는 환각 현상이 발생하는 것을 인지
+- **해결**:
+  - 프롬프트 구조와 입력 컨텍스트를 반복적으로 개선하여 경험 기반 정보만 응답하도록 제어 구조를 구축
+  - 이력서·프로젝트·기술 경험을 템플릿 단위로 구조화하여 제공하고, 응답 범위를 명확히 제한하는 방식으로 프롬프트를 최적화
+- **성과**: 경험과 일치하지 않는 응답 발생을 크게 줄이고, 사용자 질문에 대해 일관된 맞춤형 정보를 제공할 수 있는 AI 응답 구조를 구축
 
-- `company_id` 를 기준으로 대화 데이터를 격리하고, anon 키 환경에서 `company_id IS NOT NULL` 조건의 RLS 정책을 적용하여 미인증 접근을 제한
-- anon 키로 실행되는 클라이언트 UPDATE 가 RLS 에 의해 에러 없이 무시되는 문제를 진단하고, `context` 테이블 INSERT 시 `context_group.updated_at` 을 자동 갱신하는 PostgreSQL 트리거로 RLS 우회 없이 해결
+## 배운 점
 
-### Problem Solving
+### 1. 개발 생산성을 높이는 AI 활용 경험 확장
 
-1.
+- **상황**:
+  - 프롬프트 구조 설계, 컨텍스트 관리, MCP 기반 워크플로우 구축 등 AI를 개발 과정에 적극 통합하는 과정에서 개발 생산성과 결과물의 품질이 크게 향상됨을 체감
+  - AI Agent 개발 과정에서 동일한 모델을 사용하더라도 입력 컨텍스트 구조에 따라 응답 품질이 크게 달라지는 것을 경험
+- **결론**: AI를 단순히 사용하는 것보다 명확한 컨텍스트 구조와 관리 전략을 설계하는 능력이 중요하다는 점을 깨달음
 
-- 문제:
-- 해결:
-- 결과:
+## 개요
 
-### Takeaway
-
-1. AI 기술 성장과 개발 방향성에 대한 인지
-
-- 채용 담당자에게 나에 관한 정보를 눈으로 확인하는 것이 아니라, 직접 데이터를
+- **구분**: 개인
+- **기간**: 2026. 2. 18 ~ 진행 중
+- **기술 스택**
+  - **프레임워크**: TypeScript, React.js 19, Next.js 16
+  - **AI Agent**: @anthropic-ai/sdk, Claude Code, Codex
+  - **상태 관리**: Zustand
+  - **백엔드**: Supabase
+  - **유틸리티**: Next/third-parties(Google Analytics), Tailwind CSS, Shadcn, , Biome
+  - **도구**: Cursor, Notion, Slack, Figma
+  - **배포**: Vercel
 
 ---
 
-## [개인] 포장맛차
+# 2. 포장맛차
 
-- 길거리 포장마차 위치 공유 서비스
-- 사용자가 직접 위치를 등록하고, 리뷰를 작성하고, 작성된 리뷰를 기반으로 정보를 얻는 것이 특징인 실시간 지도 웹 서비스
+## 링크
 
-### ERD
+[Service](https://deliciousstreetfood.vercel.app/)・[Github](https://github.com/jjmullan/delicious_street_food)・[Notion](https://choiyoungjune.notion.site/2b521bc2456c80ba8a8ef4843c6a68c8?pvs=74)
 
-```mermaid
-erDiagram
-  user {
-    uuid user_id PK
-    text nickname "UNIQUE"
-    text bio
-    text profile_image_url
-    timestamptz created_at
-    timestamptz updated_at
-    boolean is_admin
-    text wallpaper
-  }
+## 특징
 
-  location {
-    uuid location_id PK
-    text latitude
-    text longitude
-    timestamptz created_at
-    timestamptz updated_at
-    text location_name
-    text location_address "UNIQUE"
-    uuid user_id FK
-  }
+사용자가 직접 위치를 등록하고, 리뷰를 작성하고, 작성된 리뷰를 기반으로 정보를 얻는 것이 특징인 **실시간 길거리 포장마차 위치 탐색 및 공유 서비스**
 
-  favorite {
-    uuid favorite_id PK
-    uuid user_id FK
-    uuid location_id FK
-    timestamptz created_at
-  }
+## 기술 경험
 
-  review {
-    uuid review_id PK
-    uuid user_id FK
-    uuid location_id FK
-    text review_title
-    text review_text
-    boolean is_recommended
-    timestamptz visit_datetime
-    timestamptz created_at
-    timestamptz updated_at
-  }
+### 1. Kakao Map SDK 기반 위치 데이터 동기화 기능 구현
 
-  review_image {
-    uuid review_image_id PK
-    uuid review_id FK
-    timestamptz created_at
-    text review_image_url
-  }
+- Kakao Map SDK 와 Geolocation API, Provider 패턴을 결합하여 서비스 진입 시 위치 권한 요청부터 좌표 갱신까지 상태 흐름을 단일 구조로 관리
+- 위치 데이터 생성 시 Haversine 공식을 기반으로 현재 위치와 생성 위치 간 거리를 검증하여 데이터 위변조를 방지하는 로직 구현
+- 좌표 데이터를 URL Query String 으로 관리하여 브라우저 이동 시 히스토리를 기반으로 지도 상태 복원이 가능하도록 하여 UX 개선
+- 마커 클러스터링 기능을 적용하여 다수 좌표 표시 시 렌더링 비용 감소 및 인터랙션 성능 향상
 
-  product {
-    uuid product_id PK
-    text product_name_ko
-    text product_name_en
-    timestamptz created_at
-    timestamptz updated_at
-  }
+### 2. Tanstack Query 기반 서버 상태 관리 및 페이지 구조 설계
 
-  review_product {
-    uuid review_product_id PK
-    uuid review_id FK
-    uuid product_id FK
-    bigint order_quantity
-    bigint order_price
-    boolean is_recommend
-    timestamptz created_at
-    timestamptz updated_at
-  }
+- Tanstack Query 기반 라우팅 구조 설계로 관심사 분리와 유지보수성 향상
+- Layout 컴포넌트와 인증 가드 구현으로 UI 재사용성과 접근 제어 구조 확립
+- Query Key Factory와 커스텀 훅 설계로 데이터 패칭 구조의 일관성과 확장성 확보
+- 캐시 무효화 및 조건부 Query 실행으로 불필요한 네트워크 요청 최소화 구현
 
-  reward {
-    uuid reward_id PK
-    text reward_name
-    text reward_sort
-    timestamptz created_at
-    timestamptz updated_at
-  }
+### 3. 서버리스 백엔드 구축
 
-  reward_list {
-    uuid reward_list_id PK
-    uuid user_id FK
-    uuid reward_id FK
-    timestamptz created_at
-  }
+- Supabase 기반 ERD 설계와 9개 테이블 모델링으로 관계형 데이터 구조 구축
+- OAuth 인증과 RLS Policy 설정으로 사용자별 데이터 접근 제어 구현
+- Storage 경로 구조와 Policy 설계로 사용자 단위 파일 권한 관리 구현
 
-  %% Relationships (based on FK constraints)
-  user ||--o{ location : "creates (optional)"
-  user ||--o{ favorite : "favorites"
-  location ||--o{ favorite : "is_favorited"
+### 4. 개발 환경 및 자동화
 
-  user ||--o{ review : "writes"
-  location ||--o{ review : "has"
+- Husky·Commitlint·Lint-staged 설정으로 커밋 규칙 자동 검증 환경 구축
+- Claude Code Command와 Github Actions 를 연동하여 PR 작성 및 작업 기록 자동화 구현
 
-  review ||--o{ review_image : "has"
+## 문제 해결
 
-  review ||--o{ review_product : "orders"
-  product ||--o{ review_product : "included_in"
+### 1. 서비스 요구사항에 맞는 BFF 구조 재설계
 
-  user ||--o{ reward_list : "earns"
-  reward ||--o{ reward_list : "listed_in"
-```
+- **문제**:
+  - Vercel Function 기반 BFF 를 도입하여 클라이언트에 분산되어 있던 API 호출 로직을 통합하고 코드량을 80% 감소시켰지만, 레이턴시가 증가하여 단순 조회 요청에서도 응답 속도가 저하되는 문제가 발생
+  - 실시간 위치 정보를 제공해야 하는 서비스의 특성상 잦은 레이턴시 발생은 사용자의 부정적인 경험으로 이어질 것으로 판단함
+- **해결**: SELECT 요청은 클라이언트에서 직접 호출하도록 기존 코드 구조를 복원하고, CREATE, UPDATE, DELETE 요청에만 BFF를 적용
+- **성과**:
+  - 조회 요청은 최소 경로로 처리하여 레이턴시를 최소화하고, 쓰기 요청만 BFF 를 경유하도록 분리하여 서버 검증과 RLS 정책을 결합한 안정적인 데이터 처리 구조를 확보
+  - 모든 요청을 서버로 통합하는 구조보다 서비스의 특성과 요구사항에 맞는 아키텍처 설계의 중요성을 깨달음
 
-### Outline
+## 배운 점
 
-- 기간: 2025. 11 ~
-- 스킬
-  - 프레임워크: Vite, TypeScript, React.js
-  - 핵심 라이브러리: react-kakao-maps-sdk
-  - 주요 라이브러리: React Router, Zustand, Tanstack Query, Biome, Tailwind CSS, Shadcn
-  - 배포: Vercel
-  - 문서: Notion, draw.io
-  - Data: Supabase
-  - DX: Husky, CommitLint, Claude Code, Discord
-- 관련 링크: [Service](https://deliciousstreetfood.vercel.app/), [Github](https://github.com/jjmullan/TEAM_ogugarden), [Notion](https://choiyoungjune.notion.site/2b521bc2456c80ba8a8ef4843c6a68c8?pvs=74)
+### 1. 설계 단계에서의 기획의 중요성
 
-### Technical Experience
+- **상황**: 진행 단계에서 도메인 추가, 수정, 삭제가 빈번하여 관계형 데이터베이스 구조와 인증 로직을 계속해서 변경해야 하는 상황이 발생하면서, '살아있는 문서' 관리에 많은 시간이 소모되었음
+- **결론**: 초기 설계와 도메인 정의가 개발 생산성에 큰 영향을 준다는 것을 체감했고, 기능 구현보다 도메인 정의와 User Flow 설계가 서비스 안정성과 확장성의 기반이 된다는 점을 깨달음
 
-1. 위치 데이터 동기화 및 성능 최적화
+### 2. 일관된 디자인 시스템의 필요성
 
-- 실시간 위치 스트리밍 환경 구축: Kakao Map SDK, Geolocation API 와 Provider 패턴을 결합하여 서비스 진입 시 위치 권한 요청부터 좌표 갱신까지 상태 흐름을 단일 구조로 관리
-- 위치 데이터 위변조 방지 로직 구현: Haversine 공식 기반의 이동 거리 검증 로직을 설계하여 비정상 좌표 생성 차단
-- URL 기반 상태 동기화 설계: 좌표 데이터를 Query String 으로 관리하여 브라우저 이동 시 지도 상태 복원이 가능하도록 UX 개선
-- 대용량 지도 렌더링 성능 최적화: 마커 클러스터링 기능을 적용하여 다수 좌표 표시 시 렌더링 비용 감소, 인터랙션 성능 향상
+- **상황**:
+  - 빠른 개발을 위해 Figma 기반 UX/UI 설계 없이 실제 서비스 UI와 디자인 레퍼런스를 참고하여 구현을 시도했으나, Shadcn UI 컴포넌트에 의존한 구현이 많아지면서 디자인 일관성과 사용자 경험 측면의 한계를 경험
+  - 특히 사용자에게 중요한 정보를 전달해야 하는 상황에서도 Toast UI를 Alert 대체 수단으로 사용하는 등, UI 요소의 역할과 사용 기준이 명확하지 않은 문제가 발생
+- **결론**: 디자인 기준 부재가 사용자 경험의 혼란으로 이어질 수 있음을 체감했고, UI 요소의 역할과 사용 기준을 정의하는 것이 중요하다는 점을 학습함
 
-2. 기타
+## 개요
 
-- React Query 기반 데이터 패칭 로직을 커스텀 훅으로 분리, 구조화 및 캐시 전략(Query Key Factory 패턴) 설계
-- Supabase 기반 인증/권한/DB 구조 설계
-- FSD 아키텍처를 적용하여 도메인, 기능 중심 폴더 구조 설계
-- Git Hook, Github Actions, Claude Code 기반 협업 품질 관리 자동화 환경 구축
-
-### Problem Solving
-
-1. 도메인별 호출 로직 일원화로 데이터 정합성 확보
-
-- 문제: Feature 슬라이스 내 API 호출 로직이 파편화되어 SQL 쿼리 코드의 유지보수 항목이 증가하고 일관성이 저하되는 문제
-- 해결: Supabase CLI 의 Edge Functions 으로 BFF 엔드포인트를 생성하여 SQL 쿼리문을 캡슐화하고 관리를 일원화
-- 결과: 도메인 별 서버 호출 코드량 감소
-
-2. Next.js 마이그레이션과 세션 검증 구조를 개선하여 접근 제어 안정성 확보 및 사용자 경험 개선
-
-- 문제: 공유 링크 접근 시 라우터 레벨에서 로그인 세션 검증을 수행하는 구조로 인해 비로그인 사용자가 공유 링크를 접근할 때 로그인 페이지로 리다이렉트를 하는 불필요한 동작 발생
-- 해결: SPA 방식에서 Next.js 으로 마이그레이션하여 SSR/CSR 혼합 렌더링 구조를 도입, 인증 검증 책임을 컴포넌트 레벨로 분리하여 인증이 필요한 컴포넌트만 보호하는 Guard 패턴으로 개선
-- 결과: 공유 링크 접근 시 초기 진입 속도 개선 및 UX 향상 및 인증 정책 변경에 유연하게 대처하는 구조로 개선하여 유지보수 비용 절감
-
-### Takeaway
-
-1. 설계 단계에서의 기획의 중요성
-
-- 프로젝트를 진행하면서 도메인 개선으로 인해 RDBMS 구조를 계속해서 변경하거나 인증 로직을 변경해야 하는 상황이 발생하였음
-- 계속된 구조 변경으로 '살아있는 문서' 관리에 많은 시간이 소모되었음
-- 서비스에 대한 심도있는 분석을 바탕으로 도메인과 기능을 명확히 정의하고, 서비스의 확장성, User Flow 를 고려하는 것이 개발 생산성과 서비스 안정성에 더 큰 영향을 준다는 것을 깨닫게 되었음
+- **구분**: 개인
+- **기간**: 2025. 11. 25 ~ 2025. 2. 27 (139시간)
+- **기술 스택**:
+  - **프레임워크**: TypeScript, React.js 19
+  - **AI Agent**: Claude Code
+  - **상태 관리**: Zustand
+  - **백엔드**: Supabase
+  - **유틸리티**: Tailwind CSS, Shadcn, Biome, @vercel/node
+  - **도구**: Cursor, Notion
+  - **배포**: Vercel
 
 ---
 
-## [팀] 오구텃밭
+# 3. 오구텃밭
 
-- 농산물 통합 상거래 플랫폼
-- 농산물, 농촌 체험 상품, 작물 구독 상품을 사고 파는 전자상거래 서비스
+## 링크
 
-### Outline
+[Service](https://final-05-oguogu.vercel.app/)・[Github](https://github.com/jjmullan/TEAM_ogugarden)・[Notion](https://choiyoungjune.notion.site/2e121bc2456c8079a17ec196ff6cac10?pvs=74)
 
-- 기간: 2025. 7 ~ 8
-- 구성: 프론트엔드 개발자 4인, 백엔드 개발자 1인
-- 스킬
-  - 프레임워크: TypeScript, React, Next.js
-  - 주요 라이브러리: Zustand, ESLint, Prettier
-  - 배포: Vercel
-  - 문서: Notion
-  - DX: Discord
-  - Data: MongoDB
-- 관련 링크: [Service](https://final-05-oguogu.vercel.app/), [Notion](https://choiyoungjune.notion.site/2e121bc2456c8079a17ec196ff6cac10?pvs=74)
+## 특징
 
-### Roll
+농산품, 체험 상품, 작물 구독 상품을 사고 파는 농산물 통합 상거래 플랫폼
 
-1. 프로젝트 리딩(PM)
+## 기술 경험
 
-- Agile 개발 환경 제안 및 진행(Scrum, Pair Programming), 문서 관리, 발표 자료 준비 및 발표
+### 1. API 연동 중심 커머스 도메인 최초 구현
 
-2. UX/UI 디자인
+- MongoDB API 를 활용하여 사용자의 구매 여정 End-to-End 구현
+- 컴포넌트 레벨에서 인증 및 권한을 검증하여 회원 전용 기능 제공
+- 일반 사용자/판매자 기능 구분 및 판매자 백오피스 구현
+- 상품 구독 형태의 도메인 특화 기능을 구현하여 서비스 차별화
 
-- Figma UX/UI Design, Figma Prototype 작업, Canva 상세페이지 제작
+### 2. 상품 탐색 및 검색 경험 고도화
 
-3. 컴포넌트 및 기능 개발
+- 필터 및 정렬 기능으로 사용자 맞춤형 데이터 제공
+- 검색 자동완성 기능에 초성 매칭 로직을 적용하여 검색 UX 개선
+- 검색어 상태 저장 및 URL 쿼리 동기화로 탐색 연속성 강화
 
-- 페이지 라우팅 구조 설정, 핵심 도메인 데이터 타입 정의 및 구조화, 상품 검색 및 탐색 기능, 세션 데이터 검증 기능, 마이페이지 대시보드, UI 컴포넌트 등
+## 문제 해결
 
-### Technical Experience
+### 1. 타입 계층 구조화로 중복 정의 제거 및 확장성 개선
 
-1. MongoDB API 기반 상품 구매 전반의 User Flow 기능 구현(검색/탐색 → 장바구니 (→ 문의, 북마크) → 구매 → 리뷰)
+- **문제**: NoSQL API 요청/응답 타입을 정의하는 과정에서 상품 타입별 필드가 Extra 타입에 평탄화된 형태로 누적되며 옵셔널 필드가 급증했고, 그 결과 타입 정의가 중복되고, 요청별 조합이 복잡해졌으며, 수정 시 영향 범위를 예측하기 어려운 문제 발생
+- **해결**: TypeScript 의 유틸리티 타입을 활용해 핵심 데이터 타입을 단일 기준 타입으로 재정의하고, 공통 타입을 기반으로 요청 목적별 타입을 파생 생성하도록 계층적 구조로 개선
+- **성과**: 타입 중복 정의를 제거해 가독성과 유지보수성 향상, 상품 타입별 필드 접근이 컴파일 타임에 검증되도록 하여 타입 안정성을 확보, 확장성 개선
 
-2. 기타
+## 배운 점
 
-- Next.js App Router 기반 페이지 라우팅: 라우트 그룹과 동적 라우트를 활용한 도메인별 페이지 구조 분리
-- 팀 프로젝트 전용 커스텀 폴더 구조 적용: 기존 역할 중심 폴더 구조에 FSD 아키텍처의 개념을 일부 반영한 app, feature, shared, components 구조
-- Vercel CI/CD 파이프라인
+### 1. 지속 가능한 문서 관리를 위한 팀 참여의 중요성
 
-### Problem Solving
+- **상황**:
+  - 기능적 요구사항(FR) 항목과 매칭되는 기능별 Database 를 구축하고, 각 기능 개발 담당자가 진행 상황을 아카이빙 하는 방식을 제안
+  - 총 5차의 스프린트 중 본격적인 기능 개발이 시작되는 3차 스프린트부터 문서가 잘 아카이빙되지 않아 진행 상황을 정확히 추적하기 어려웠고, 진행 상황 파악을 Daily Scrum 에 의존하게 되면서 정보 누락과 맥락이 단절되는 결과를 초래
+- **결론**: 체계화된 문서 관리 규칙과 팀원의 참여적인 태도를 유도하는 것의 중요성을 깨달았고, 이후 문서 관리의 효율성과 개발 생산성을 고려한 자동화된 도구의 도입 방식을 고려하게 됨
 
-1. 타입 계층 구조화로 중복 코드 제거 및 확장성 개선
+## 개요
 
-- 문제: NoSQL API 통신 요청/응답 데이터 타입을 정의하는 과정에서 필드별 선택적 타입이 과도하게 증가하여 타입 정의가 중복되고, 요청별 타입 조합이 복잡해지며, 유지보수 시 타입 수정 범위가 예측되지 않는 문제 발생
-- 해결: TypeScript 의 유틸리티 타입을 활용해 핵심 데이터 타입을 단일 기준 타입으로 재정의하고, 공통 타입을 기반으로 요청 목적별 타입을 파생 생성하도록 평탄화된 구조에서 계층 구조로 개선
-- 결과: 타입 중복 정의 제거로 코드 가독성 및 유지보수성 향상, 타입 안정성 확보
-
-### Takeaway
-
-1. 협업 프로젝트에서 문서화 체계의 중요성
-
-- 기능적 요구사항(FR) 항목과 매칭되는 기능별 Database 를 구축하고, 각 기능 개발 담당자가 진행 상황을 아카이빙 하는 방식을 제안
-- 총 5차의 스프린트 중 본격적인 기능 개발이 시작되는 3차 스프린트부터 문서가 잘 아카이빙되지 않아 진행 상황을 정확히 추적하기 어려웠고, 진행 상황 파악을 Daily Scrum 에 의존하게 되면서 정보 누락과 맥락이 단절되는 결과를 초래
-- 문서 관리에 대한 요청이 구조화되지 않으면 개발자의 생산성을 떨어뜨릴 수 있음을 인지하게 됨
-- 체계화된 문서 관리 규칙과 팀원의 참여적인 태도를 유도하는 것의 중요성을 깨달았고, 이후 문서 관리의 효율성과 개발 생산성을 고려한 자동화된 도구의 도입 방식을 고려하게 됨
+- **구분**: 팀 (프론트엔드 4인)
+- **기간**: 2025. 7. 7 ~ 8. 7 (약 248시간)
+- **담당 업무**
+  - **프로젝트 리딩(PM)**: Agile 개발 환경 제안 및 진행(Scrum, Pair Programming), 문서 관리, 발표 자료 준비 및 발표
+  - **UX/UI**: Figma UX/UI Design, Canva 상세페이지 제작
+  - **개발**: App Router 경로 구조화, 핵심 도메인 데이터 타입 정의 및 구조화, 상품 검색 및 탐색 기능 개발, 세션 데이터 검증 기능 개발, 마이페이지 대시보드 개발, UI 컴포넌트 개발 등
+- **기술 스택**
+  - **프레임워크**: TypeScript, React.js 19, Next.js 15
+  - **상태 관리**: Zustand
+  - **백엔드**: MongoDB
+  - **유틸리티**: ESLint, Prettier, Tailwind CSS, Shadcn
+  - **도구**: Visual Studio Code, Notion, Discord, Figma
+  - **배포**: Vercel
