@@ -9,6 +9,7 @@
  */
 
 import Image from 'next/image';
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useChatMessages, useIsStreaming, useStreamingContent } from '../../model/chat';
@@ -27,6 +28,38 @@ function UserMessage({ content }: { content: string }) {
 }
 
 /**
+ * 이미지를 전체 화면으로 표시하는 라이트박스 컴포넌트.
+ *
+ * @param props.src - 표시할 이미지 URL
+ * @param props.alt - 이미지 대체 텍스트
+ * @param props.onClose - 라이트박스를 닫는 콜백 함수
+ */
+function ImageLightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  return (
+    <div role="dialog" aria-modal="true" aria-label="이미지 전체 화면" className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+      <button
+        type="button"
+        aria-label="닫기"
+        className="absolute inset-0 w-full h-full cursor-pointer"
+        onClick={onClose}
+        onKeyDown={(e) => e.key === 'Escape' && onClose()}
+      />
+      <div className="relative max-w-[90vw] max-h-[90vh] z-10">
+        <Image src={src} alt={alt} width={1200} height={900} className="max-h-[90vh] w-auto object-contain rounded-lg" />
+        {alt && <p className="text-white text-sm text-center mt-2">{alt}</p>}
+        <button
+          type="button"
+          aria-label="닫기"
+          className="absolute top-2 right-2 text-white bg-black/50 rounded-full w-8 h-8 flex items-center justify-center text-lg leading-none"
+          onClick={onClose}>
+          ×
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
  * AI 어시스턴트의 응답을 왼쪽 정렬로 표시하는 컴포넌트.
  * Markdown 을 GFM(GitHub Flavored Markdown) 형식으로 파싱하여 렌더링한다.
  *
@@ -34,6 +67,8 @@ function UserMessage({ content }: { content: string }) {
  * @param props.isStreaming - 스트리밍 진행 중 여부. `true` 이면 커서 애니메이션을 표시한다 (기본값: `false`)
  */
 function AssistantMessage({ content, isStreaming = false }: { content: string; isStreaming?: boolean }) {
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+
   return (
     <div className="flex justify-start">
       <div className="max-w-[80%] bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-2.5 text-sm">
@@ -60,17 +95,27 @@ function AssistantMessage({ content, isStreaming = false }: { content: string; i
             tr: ({ children }) => <tr className="border-b border-gray-300 last:border-0">{children}</tr>,
             th: ({ children }) => <th className="px-3 py-1.5 text-left font-semibold">{children}</th>,
             td: ({ children }) => <td className="px-3 py-1.5">{children}</td>,
-            img: ({ src, alt }) => (
-              <span className="block -mx-4 my-2 overflow-hidden rounded-lg">
-                <Image src={src} alt={alt ?? ''} width={500} height={500} className="w-full" />
-                {alt && <span className="block text-xs text-gray-500 px-4 py-1 text-center">{alt}</span>}
-              </span>
-            ),
+            img: ({ src, alt }) => {
+              if (!src || typeof src !== 'string') return null;
+              const label = alt ?? '';
+              return (
+                <span className="block -mx-4 my-2 overflow-hidden rounded-lg">
+                  <button
+                    type="button"
+                    className="w-full p-0 m-0 border-0 bg-transparent cursor-zoom-in"
+                    onClick={() => setLightbox({ src, alt: label })}>
+                    <Image src={src} alt={label} width={500} height={500} className="w-full px-4" />
+                  </button>
+                  {label && <span className="block text-xs text-gray-500 px-4 py-1 text-center">{label}</span>}
+                </span>
+              );
+            },
           }}>
           {content}
         </ReactMarkdown>
         {isStreaming && <span className="inline-block w-1 h-4 bg-gray-400 ml-0.5 animate-pulse align-middle" />}
       </div>
+      {lightbox && <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
     </div>
   );
 }
