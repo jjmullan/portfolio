@@ -118,7 +118,7 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
       <button
         type="submit"
         disabled={isStreaming || !input.trim()}
-        className="absolute bottom-3 right-2 rounded-lg p-3 cursor-pointer bg-white disabled:cursor-not-allowed disabled:opacity-40">
+        className="absolute bottom-3 right-2 rounded-lg p-3 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40">
         <Image src="/icons/enter.svg" alt="전송" width={16} height={16} />
       </button>
     </form>

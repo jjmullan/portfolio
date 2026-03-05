@@ -111,10 +111,7 @@ export default function NewChatBoxClient({ placeholder }: { placeholder: string 
         rows={1}
         disabled={isLoading}
       />
-      <button
-        type="submit"
-        className="absolute bottom-3 right-2 rounded-lg p-3 cursor-pointer bg-white disabled:cursor-not-allowed"
-        disabled={isLoading}>
+      <button type="submit" className="absolute bottom-3 right-2 rounded-lg p-3 cursor-pointer disabled:cursor-not-allowed" disabled={isLoading}>
         <Image src={'/icons/enter.svg'} alt={''} width={16} height={16} />
       </button>
     </form>
