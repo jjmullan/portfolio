@@ -48,6 +48,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://youngjune.dev/',
   },
+  icons: {
+    icon: '/favicon/favicon.png',
+    apple: '/favicon/favicon.png',
+  },
   openGraph: {
     title: '최영준의 포트폴리오',
     description: '프론트엔드 개발자 최영준의 포트폴리오입니다.',
@@ -78,7 +82,7 @@ const jsonLd = {
       knowsAbout: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Tailwind CSS'],
       nationality: { '@type': 'Country', name: 'South Korea' },
       sameAs: ['https://github.com/jjmullan', 'https://www.linkedin.com/in/jjmullan'],
-      // "image": "https://youngjune.dev/og/profile.jpg" (있으면 강추)
+      image: 'https://youngjune.dev/favicon/favicon_112.png',
     },
     {
       '@type': 'WebSite',
