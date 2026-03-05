@@ -21,8 +21,54 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: '최영준의 포트폴리오',
-  description: '최영준의 포트폴리오',
+  title: {
+    default: '최영준의 포트폴리오',
+    template: '%s | 최영준',
+  },
+  description: '프론트엔드 개발자 최영준의 포트폴리오입니다.',
+  keywords: ['프론트엔드', '포트폴리오', '최영준', 'Next.js', 'React', 'TypeScript', '프론트엔드 포트폴리오', '개발자 포트폴리오'],
+  authors: [{ name: '최영준', url: 'https://github.com/jjmullan' }],
+  creator: '최영준',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  alternates: {
+    canonical: 'https://youngjune.dev/',
+  },
+  openGraph: {
+    title: '최영준의 포트폴리오',
+    description: '프론트엔드 개발자 최영준의 포트폴리오입니다.',
+    url: 'https://youngjune.dev/',
+    siteName: '최영준의 포트폴리오',
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '최영준의 포트폴리오',
+    description: '프론트엔드 개발자 최영준의 포트폴리오입니다.',
+    creator: '@jjmullan',
+  },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      name: '최영준',
+      url: 'https://youngjune.dev/',
+      sameAs: ['https://github.com/jjmullan'],
+      jobTitle: 'Frontend Developer',
+    },
+    {
+      '@type': 'WebSite',
+      name: '최영준의 포트폴리오',
+      url: 'https://youngjune.dev/',
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -33,6 +79,10 @@ export default function RootLayout({
   return (
     <html lang="ko-KR">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
 
         {/* 1024px 이하: 웹 전용 안내 */}
