@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { GetCompanyNameModal } from '@entities/company';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Analytics } from '@vercel/analytics/next';
 import Navigation from '@widgets/navigation/Navigation';
 
 const geistSans = Geist({
@@ -79,11 +80,9 @@ export default function RootLayout({
   return (
     <html lang="ko-KR">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
+        <Analytics />
 
         {/* 1024px 이하: 웹 전용 안내 */}
         <div className="lg:hidden h-screen flex flex-col items-center justify-center gap-y-1 bg-white">
