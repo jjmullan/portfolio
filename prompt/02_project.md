@@ -60,7 +60,7 @@
 ## 개요
 
 - **구분**: 개인
-- **기간**: 2026. 2. 18 ~ 진행 중
+- **기간**: 2026. 2. 18 ~ 2026. 3. 5
 - **기술 스택**
   - **프레임워크**: TypeScript, React.js 19, Next.js 16
   - **AI Agent**: @anthropic-ai/sdk, Claude Code, Codex
