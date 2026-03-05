@@ -72,7 +72,7 @@
 
 ## DFD
 
-![신규 채팅](/projects/portfolio/dfd_inprogresschat.png)
+![신규 채팅](/projects/portfolio/dfd_newchat.png)
 ![기존 채팅](/projects/portfolio/dfd_inprogresschat.png)
 
 ## ERD
