@@ -70,6 +70,13 @@
   - **도구**: Cursor, Notion, Slack, Figma
   - **배포**: Vercel
 
+## 데이터 흐름도
+
+![신규 채팅 데이터 흐름도](/projects/portfolio/architecture_inprogresschat.png)
+![기존 채팅 데이터 흐름도](/projects/portfolio/architecture_inprogresschat.png)
+
+## ERD
+
 ---
 
 # 2. 포장맛차

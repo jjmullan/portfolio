@@ -8,6 +8,7 @@
  * 스트리밍 중에는 커서 애니메이션(`animate-pulse`)이 표시된다.
  */
 
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useChatMessages, useIsStreaming, useStreamingContent } from '../../model/chat';
@@ -59,6 +60,12 @@ function AssistantMessage({ content, isStreaming = false }: { content: string; i
             tr: ({ children }) => <tr className="border-b border-gray-300 last:border-0">{children}</tr>,
             th: ({ children }) => <th className="px-3 py-1.5 text-left font-semibold">{children}</th>,
             td: ({ children }) => <td className="px-3 py-1.5">{children}</td>,
+            img: ({ src, alt }) => (
+              <span className="block -mx-4 my-2 overflow-hidden rounded-lg">
+                <Image src={src} alt={alt ?? ''} width={500} height={500} className="w-full" />
+                {alt && <span className="block text-xs text-gray-500 px-4 py-1 text-center">{alt}</span>}
+              </span>
+            ),
           }}>
           {content}
         </ReactMarkdown>
