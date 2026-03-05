@@ -69,15 +69,36 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Person',
+      '@id': 'https://youngjune.dev/#person',
       name: '최영준',
+      alternateName: 'June',
       url: 'https://youngjune.dev/',
-      sameAs: ['https://github.com/jjmullan'],
       jobTitle: 'Frontend Developer',
+      description: 'React, Next.js, TypeScript 기반으로 제품 중심 UI를 만드는 프론트엔드 개발자 최영준입니다.',
+      knowsAbout: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Tailwind CSS'],
+      nationality: { '@type': 'Country', name: 'South Korea' },
+      sameAs: ['https://github.com/jjmullan', 'https://www.linkedin.com/in/jjmullan'],
+      // "image": "https://youngjune.dev/og/profile.jpg" (있으면 강추)
     },
     {
       '@type': 'WebSite',
+      '@id': 'https://youngjune.dev/#website',
       name: '최영준의 포트폴리오',
       url: 'https://youngjune.dev/',
+      description: '프론트엔드 개발자 최영준의 포트폴리오 사이트입니다.',
+      inLanguage: 'ko-KR',
+      publisher: { '@id': 'https://youngjune.dev/#person' },
+    },
+    {
+      '@type': ['WebPage', 'ProfilePage'],
+      '@id': 'https://youngjune.dev/#home',
+      name: '최영준 | Frontend Developer Portfolio',
+      url: 'https://youngjune.dev/',
+      description: '프로젝트, 기술 스택, 문제 해결 경험을 소개하는 프론트엔드 개발자 최영준의 포트폴리오 홈입니다.',
+      inLanguage: 'ko-KR',
+      isPartOf: { '@id': 'https://youngjune.dev/#website' },
+      about: { '@id': 'https://youngjune.dev/#person' },
+      mainEntity: { '@id': 'https://youngjune.dev/#person' },
     },
   ],
 };
