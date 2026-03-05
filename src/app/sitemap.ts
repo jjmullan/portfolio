@@ -3,6 +3,12 @@ import type { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
+      url: 'https://youngjune.dev/',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 1.0,
+    },
+    {
       url: 'https://youngjune.dev/new',
       lastModified: new Date(),
       changeFrequency: 'weekly',

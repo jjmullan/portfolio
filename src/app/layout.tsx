@@ -27,7 +27,17 @@ export const metadata: Metadata = {
     template: '%s | 최영준',
   },
   description: '프론트엔드 개발자 최영준의 포트폴리오입니다.',
-  keywords: ['프론트엔드', '포트폴리오', '최영준', 'Next.js', 'React', 'TypeScript', '프론트엔드 포트폴리오', '개발자 포트폴리오'],
+  keywords: [
+    '프론트엔드 포트폴리오',
+    '개발자 포트폴리오',
+    '프론트엔드 개발자 포트폴리오',
+    '프론트엔드',
+    '포트폴리오',
+    '최영준',
+    'Next.js',
+    'React',
+    'TypeScript',
+  ],
   authors: [{ name: '최영준', url: 'https://github.com/jjmullan' }],
   creator: '최영준',
   robots: {
