@@ -40,7 +40,7 @@ const CAREER_ITEMS: CareerItem[] = [
     title: '[개인] 포트폴리오',
     category: 'dev',
     descriptions: ['Anthropic SDK 스트리밍 파이프라인 기반 개발 포트폴리오'],
-    link: 'https://jjmullan.vercel.app/',
+    link: 'https://youngjune.dev/',
   },
   {
     period: '2025. 12',

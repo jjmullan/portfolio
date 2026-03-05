@@ -2,7 +2,7 @@
 
 ## 링크
 
-[Service](https://jjmullan.vercel.app/)
+[Service](https://youngjune.dev/)
 
 ## 특징
 
