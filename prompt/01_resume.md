@@ -7,7 +7,7 @@
 - 생년월일: 1994년 2월 4일
 - 이메일: jjmullan24@gmail.com
 - 링크
-  - GitHub: https://github.com/jjmullan?tab=repositories
+  - GitHub: https://github.com/jjmullan
   - LinedIn: https://www.linkedin.com/in/jjmullan
   - Instagram: https://www.instagram.com/choiyoungjune/
 
