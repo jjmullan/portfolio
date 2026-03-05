@@ -59,12 +59,14 @@ export const metadata: Metadata = {
     siteName: '최영준의 포트폴리오',
     locale: 'ko_KR',
     type: 'website',
+    images: [{ url: 'https://youngjune.dev/og/og_thumbnail.png', width: 1200, height: 630, alt: '최영준의 포트폴리오' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '최영준의 포트폴리오',
     description: '프론트엔드 개발자 최영준의 포트폴리오입니다.',
     creator: '@jjmullan',
+    images: ['https://youngjune.dev/og/og_thumbnail.png'],
   },
 };
 
