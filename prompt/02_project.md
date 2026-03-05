@@ -70,12 +70,18 @@
   - **도구**: Cursor, Notion, Slack, Figma
   - **배포**: Vercel
 
-## 데이터 흐름도
+## DFD
 
-![신규 채팅 데이터 흐름도](/projects/portfolio/architecture_inprogresschat.png)
-![기존 채팅 데이터 흐름도](/projects/portfolio/architecture_inprogresschat.png)
+![신규 채팅](/projects/portfolio/dfd_inprogresschat.png)
+![기존 채팅](/projects/portfolio/dfd_inprogresschat.png)
 
 ## ERD
+
+![ERD](/projects/portfolio/erd.png)
+
+## User Flow
+
+![User Flow](/projects/portfolio/userflow.png)
 
 ---
 
@@ -154,6 +160,19 @@
   - **유틸리티**: Tailwind CSS, Shadcn, Biome, @vercel/node
   - **도구**: Cursor, Notion
   - **배포**: Vercel
+
+## DFD
+
+![위치 조회](/projects/deliciousstreetfood/dfd_fetchlocation.png)
+![위치 생성](/projects/deliciousstreetfood/dfd_createlocation.png)
+
+## ERD
+
+![ERD](/projects/deliciousstreetfood/erd.png)
+
+## User FLow
+
+![User Flow](/projects/deliciousstreetfood/userflow.png)
 
 ---
 
