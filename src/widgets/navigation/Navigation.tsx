@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function Navigation() {
-  const [toggleMenu, setToggleMenu] = useState(true);
+  const [toggleMenu, setToggleMenu] = useState(false);
   const conversations = useConversations();
   const { setConversations } = useConversationHistoryActions();
   const companyId = useCompanyId();
