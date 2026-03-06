@@ -30,6 +30,7 @@ export default function GetCompanyNameModal() {
   const { setCompanyName, setCompanyId } = useCompanyActions();
   const hasHydrated = useHasHydrated();
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState('');
 
   // 하이드레이션이 완료된 후 렌더링하는 로직 추가
   if (!hasHydrated) return null;
@@ -94,20 +95,22 @@ export default function GetCompanyNameModal() {
             required
             maxLength={30}
             disabled={isLoading}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <div className="flex flex-col gap-y-2">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || name === ''}
               className="bg-black text-white rounded-lg px-4 py-2 text-sm cursor-pointer w-full font-bold disabled:opacity-50 disabled:cursor-not-allowed">
-              {isLoading ? '처리 중...' : '입력 완료'}
+              {isLoading ? '처리 중...' : name === '' ? '회사명을 입력해주세요' : '입력 완료'}
             </button>
             <button
               type="button"
               disabled={isLoading}
               className="bg-gray-100 rounded-lg px-4 py-2 text-sm text-black/80 cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => handleInsertCompany(null)}>
-              공개하고 싶지 않아요
+              공개하고 싶지 않아요 (파일 다운로드 불가)
             </button>
           </div>
         </form>
