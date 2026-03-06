@@ -8,7 +8,7 @@
 - 이메일: jjmullan24@gmail.com
 - 링크
   - GitHub: https://github.com/jjmullan
-  - LinedIn: https://www.linkedin.com/in/jjmullan
+  - LinedIn: https://www.linkedin.com/in/choiyoungjune/
   - Instagram: https://www.instagram.com/choiyoungjune/
 
 ## 핵심 역량

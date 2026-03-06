@@ -83,7 +83,7 @@ const jsonLd = {
       description: 'React, Next.js, TypeScript 기반으로 제품 중심 UI를 만드는 프론트엔드 개발자 최영준입니다.',
       knowsAbout: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Tailwind CSS'],
       nationality: { '@type': 'Country', name: 'South Korea' },
-      sameAs: ['https://github.com/jjmullan', 'https://www.linkedin.com/in/jjmullan'],
+      sameAs: ['https://github.com/jjmullan', 'https://www.linkedin.com/in/choiyoungjune'],
       image: 'https://youngjune.dev/favicon/favicon_112.png',
     },
     {

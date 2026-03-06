@@ -46,7 +46,7 @@ export default function Navigation() {
             <H2 title="관련 링크" isHidden={!toggleMenu} />
             <ul className="flex flex-col">
               <ListLink href="https://github.com/jjmullan" image="github" title="Github" />
-              <ListLink href="https://www.linkedin.com/in/jjmullan" image="linkedin" title="LinkedIn" />
+              <ListLink href="https://www.linkedin.com/in/choiyoungjune" image="linkedin" title="LinkedIn" />
               {/* <ListLink href="https://jjmullan.slack.com/" image="slack" title="Slack" /> */}
               <ListLink href="https://www.instagram.com/choiyoungjune/" image="instagram" title="Instagram" />
               <ListLink href="https://drive.google.com/drive/folders/1MG7HggVtEdWywLOnap-e5yxJZ3k0SAVa" image="googledrive" title="File Download" />
