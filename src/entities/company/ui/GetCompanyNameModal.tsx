@@ -14,6 +14,8 @@ import { useState } from 'react';
 import { useCompanyActions, useCompanyName, useHasHydrated } from '../../../shared/model/store/company';
 import { insertCompany } from '../api/insertCompany';
 
+const MOBILE_BREAKPOINT = 767;
+
 /**
  * 채용 담당자 회사명 입력 모달 컴포넌트.
  *
@@ -31,6 +33,9 @@ export default function GetCompanyNameModal() {
 
   // 하이드레이션이 완료된 후 렌더링하는 로직 추가
   if (!hasHydrated) return null;
+
+  // 모바일(~767px) 환경에서는 모달을 표시하지 않음
+  if (window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches) return null;
 
   /**
    * 회사명을 `company` 테이블에 INSERT 하고 반환된 `company_id` 를 전역 상태에 저장하는 공통 핸들러.
