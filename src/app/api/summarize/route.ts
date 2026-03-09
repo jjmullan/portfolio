@@ -1,3 +1,9 @@
+/**
+ * @file route.ts
+ * @description 사용자 입력 텍스트를 30자 이내의 한 줄 제목으로 요약하는 API Route Handler.
+ * Claude Haiku 모델을 사용하며, `context_group.subject` 값 생성에 활용된다.
+ */
+
 import Anthropic from '@anthropic-ai/sdk';
 import type { NextRequest } from 'next/server';
 
@@ -13,6 +19,16 @@ const SUMMARIZE_SYSTEM_PROMPT = `사용자가 입력한 텍스트를 30자 이�
 - 마침표, 물음표 등 문장 부호 제외
 - 제목만 출력하고 다른 설명은 절대 포함하지 않음`;
 
+/**
+ * 텍스트 요약 엔드포인트.
+ *
+ * @description
+ * 요청 본문의 `prompt` 텍스트를 Claude Haiku 로 30자 이내의 한 줄 제목으로 요약한다.
+ * `prompt` 가 비어있으면 400, API 키 미설정이면 500, Anthropic API 오류면 적절한 상태 코드를 반환한다.
+ *
+ * @param request - Next.js 요청 객체 (`{ prompt: string }` 형태의 JSON 본문)
+ * @returns 요약된 한 줄 제목 문자열 또는 에러 메시지가 담긴 `Response`
+ */
 export async function POST(request: NextRequest): Promise<Response> {
   let prompt = '';
   try {

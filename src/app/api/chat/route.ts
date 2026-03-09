@@ -1,3 +1,10 @@
+/**
+ * @file route.ts
+ * @description Claude AI 스트리밍 채팅 API Route Handler.
+ * 클라이언트에서 받은 대화 히스토리를 기반으로 Anthropic SDK 를 통해 스트리밍 응답을 생성하고,
+ * `ReadableStream` 으로 반환한다. 에러 발생 시 `[STREAM_ERROR]:` 접두사를 붙여 스트림으로 전달한다.
+ */
+
 import Anthropic from '@anthropic-ai/sdk';
 import type { MessageStreamEvent } from '@anthropic-ai/sdk/resources/messages/messages';
 import { loadAllTemplates } from '@shared/lib/loadPrompt';
@@ -35,6 +42,12 @@ const SYSTEM_PROMPT_HEADER = `
 아래는 최영준에 대한 정보입니다.
 `;
 
+/**
+ * Anthropic SDK 에 전달하는 단일 메시지 타입.
+ *
+ * @property role - 발신자 구분 (`'user'` | `'assistant'`)
+ * @property content - 메시지 본문 텍스트
+ */
 type Message = {
   role: 'user' | 'assistant';
   content: string;
@@ -44,6 +57,19 @@ type Message = {
 // Response 가 이미 반환된 이후에는 HTTP 상태 코드를 변경할 수 없기 때문이다.
 const STREAM_ERROR_PREFIX = '[STREAM_ERROR]:';
 
+/**
+ * Claude AI 스트리밍 채팅 엔드포인트.
+ *
+ * @description
+ * 요청 본문에서 대화 히스토리(최대 10개)를 추출하고, 프롬프트 템플릿과 결합한 시스템 프롬프트로
+ * Anthropic SDK 스트리밍을 시작한다. 응답은 `ReadableStream` 으로 클라이언트에 전달된다.
+ * 각 단계(JSON 파싱, API 키 검증, 프롬프트 로드, 스트림 초기화)에서 실패 시
+ * `[STREAM_ERROR]:` 접두사가 붙은 에러 메시지를 반환한다.
+ * 시스템 프롬프트는 `cache_control` 을 통해 Anthropic 서버에 5분간 캐싱된다.
+ *
+ * @param request - Next.js 요청 객체 (`{ messages: Message[] }` 형태의 JSON 본문)
+ * @returns `text/plain` 스트리밍 응답 또는 에러 메시지가 담긴 `Response`
+ */
 export async function POST(request: NextRequest): Promise<Response> {
   let messages: Message[] = [];
 

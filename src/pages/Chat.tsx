@@ -1,5 +1,13 @@
 'use client';
 
+/**
+ * @file Chat.tsx
+ * @description AI 채팅 페이지 컴포넌트.
+ * 최초 진입 시 스토어에 저장된 첫 질문으로 스트리밍을 시작하고,
+ * 사이드바에서 기존 대화를 선택하면 해당 `context_group_id` 의 메시지를 복원한다.
+ * `useSearchParams` 사용으로 `Suspense` 경계 내에서 렌더링해야 한다.
+ */
+
 import { type ContextRecord, fetchContextsByGroupId, insertContext, useConversationHistoryActions } from '@entities/conversation';
 import {
   ChatMessageList,
@@ -56,14 +64,18 @@ export default function Chat() {
     sendMessage({
       messages: [{ role: 'user', content: question }],
       onChunk: appendStreamingContent,
-      onDone: (fullResponse) => {
+      onDone: async (fullResponse) => {
         finalizeAssistantMessage();
         if (contextGroupId) {
-          insertContext({
-            context_group_id: contextGroupId,
-            input_context: question,
-            output_context: fullResponse,
-          }).catch(console.error);
+          try {
+            await insertContext({
+              context_group_id: contextGroupId,
+              input_context: question,
+              output_context: fullResponse,
+            });
+          } catch (error) {
+            console.error(error);
+          }
         }
         // 스트리밍 완료 시 사이드바 최근 대화 내역에 추가
         if (contextGroup) prependConversation(contextGroup);
@@ -84,15 +96,20 @@ export default function Chat() {
 
     // contextGroupId 전환 시 이전 대화 내역을 즉시 초기화
     setMessages([]);
-    fetchContextsByGroupId(contextGroupId)
-      .then((contexts: ContextRecord[]) => {
+
+    const restore = async () => {
+      try {
+        const contexts = await fetchContextsByGroupId(contextGroupId);
         const restoredMessages: ChatMessageType[] = contexts.flatMap(({ input_context, output_context }) => [
           { id: crypto.randomUUID(), role: 'user' as const, content: input_context },
           { id: crypto.randomUUID(), role: 'assistant' as const, content: output_context },
         ]);
         setMessages(restoredMessages);
-      })
-      .catch(console.error);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    restore();
   }, [contextGroupId]);
 
   // 스트리밍 중: instant(즉시 이동), 완료 후: smooth(부드럽게 이동)

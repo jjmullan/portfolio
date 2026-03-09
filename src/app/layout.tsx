@@ -1,3 +1,10 @@
+/**
+ * @file layout.tsx
+ * @description 루트 레이아웃 컴포넌트.
+ * 전역 폰트, 메타데이터, JSON-LD 구조화 데이터, Google Analytics, Vercel Analytics 를 설정하고,
+ * 모바일 접근 제한 안내 및 데스크톱 레이아웃(네비게이션 + 메인 콘텐츠)을 렌더링한다.
+ */
+
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -109,6 +116,16 @@ const jsonLd = {
   ],
 };
 
+/**
+ * 전체 페이지의 루트 레이아웃 컴포넌트.
+ *
+ * @description
+ * - 1024px 이하(모바일/태블릿 일부): 스마트폰 접근 제한 안내 화면을 표시한다.
+ * - 1024px 초과(데스크톱): `Navigation` + `main` 콘텐츠 영역으로 구성된 레이아웃을 렌더링한다.
+ * - `GetCompanyNameModal` 은 최초 진입 시 자동으로 팝업된다.
+ *
+ * @param props.children - 페이지 라우트 컴포넌트
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

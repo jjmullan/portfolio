@@ -1,8 +1,22 @@
+/**
+ * @file not-found.tsx
+ * @description 404 Not Found 페이지 컴포넌트.
+ * 존재하지 않는 경로 접근 시 Next.js App Router 가 자동으로 렌더링한다.
+ * 검색 엔진에 노출되지 않도록 `robots: { index: false }` 메타데이터를 설정한다.
+ */
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = { robots: { index: false } };
 
+/**
+ * 404 Not Found 페이지 컴포넌트.
+ *
+ * @description
+ * 잘못된 경로 또는 삭제된 페이지 접근 시 표시된다.
+ * '홈으로 돌아가기' 링크로 루트(`/`)로 이동할 수 있다.
+ */
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center gap-y-6 w-full max-w-layout px-10 min-h-screen">

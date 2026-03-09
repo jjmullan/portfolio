@@ -1,5 +1,12 @@
 'use client';
 
+/**
+ * @file Navigation.tsx
+ * @description 사이드바 네비게이션 위젯 컴포넌트.
+ * 메뉴 토글, 관련 링크, 최근 대화 내역 목록을 제공한다.
+ * `companyId` 변경 시 Supabase 에서 해당 회사의 대화 내역을 조회하여 스토어에 저장한다.
+ */
+
 import { fetchContextGroups, useConversationHistoryActions, useConversations } from '@entities/conversation';
 import { useCompanyId } from '@shared/model/store/company';
 import ListLink from '@shared/ui/li/ListLink';
@@ -7,6 +14,14 @@ import H2 from '@shared/ui/title/H2';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+/**
+ * 사이드바 네비게이션 컴포넌트.
+ *
+ * @description
+ * - 메뉴 토글 버튼으로 사이드바 너비를 전환한다 (`240px` ↔ `60px`).
+ * - `companyId` 변경 시 해당 회사의 최근 대화 내역을 로드하여 스토어를 초기화한다.
+ * - 관련 링크(Github, LinkedIn 등)와 최근 대화 내역 목록을 표시한다.
+ */
 export default function Navigation() {
   const [toggleMenu, setToggleMenu] = useState(false);
   const conversations = useConversations();
@@ -15,7 +30,15 @@ export default function Navigation() {
 
   // companyId 변경 시 해당 company 의 최근 대화 내역만 로드. companyId 가 null 이면 빈 배열 반환
   useEffect(() => {
-    fetchContextGroups(companyId!).then(setConversations).catch(console.error);
+    const load = async () => {
+      try {
+        const data = await fetchContextGroups(companyId!);
+        setConversations(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    load();
   }, [companyId, setConversations]);
   const toggleMenuOnOff = () => {
     setToggleMenu((state) => !state);

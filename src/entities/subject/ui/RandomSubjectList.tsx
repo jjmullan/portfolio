@@ -1,22 +1,40 @@
 'use client';
 
+/**
+ * @file RandomSubjectList.tsx
+ * @description Supabase `context_group` 에서 무작위 subject 3개를 조회하여 링크 목록으로 렌더링하는 컴포넌트.
+ * 마운트 시 1회 호출하며, 로딩 중에는 스켈레톤 UI 를, 데이터가 없으면 기본 예시 항목을 표시한다.
+ */
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { fetchRandomSubjects, type SubjectItem } from '../api/fetchRandomSubjects';
 
 /**
- * Supabase `context_group` 에서 무작위 subject 3개를 가져와 링크 목록으로 렌더링하는 컴포넌트.
- * 각 항목 클릭 시 해당 대화 내역 페이지(`/chat?context={id}`)로 이동한다.
+ * 무작위 대화 주제 3개를 링크 목록으로 렌더링하는 컴포넌트.
+ *
+ * @description
+ * - 마운트 시 `fetchRandomSubjects` 를 호출하여 최대 3개의 주제를 조회한다.
+ * - 로딩 중에는 `animate-pulse` 스켈레톤 UI 를 표시한다.
+ * - 데이터가 없으면 하드코딩된 예시 항목 3개를 표시한다.
+ * - 각 항목 클릭 시 `/chat?context={context_group_id}` 로 이동한다.
  */
 export default function RandomSubjectList() {
   const [subjects, setSubjects] = useState<SubjectItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchRandomSubjects()
-      .then(setSubjects)
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
+    const load = async () => {
+      try {
+        const data = await fetchRandomSubjects();
+        setSubjects(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    load();
   }, []);
 
   if (isLoading) {

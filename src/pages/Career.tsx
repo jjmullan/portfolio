@@ -1,7 +1,32 @@
+/**
+ * @file Career.tsx
+ * @description 성장 과정(이력) 페이지 컴포넌트.
+ * 최신순으로 정렬된 경력, 개발, 자격증, 학력, 기타 항목을 타임라인 형태로 렌더링한다.
+ * 데이터는 정적 상수(`CAREER_ITEMS`)로 관리하며, API 호출 없이 서버에서 렌더링된다.
+ */
+
 import Link from 'next/link';
 
+/**
+ * 이력 항목의 카테고리 타입.
+ * - `'work'`: 실무 경험
+ * - `'dev'`: 개발 프로젝트
+ * - `'certificate'`: 자격증
+ * - `'education'`: 학력
+ * - `'etc'`: 기타
+ */
 type CareerCategory = 'work' | 'dev' | 'certificate' | 'education' | 'etc';
 
+/**
+ * 단일 이력 항목 타입.
+ *
+ * @property period - 활동 기간 문자열 (예: `'2025. 7 ~ 2025. 8'`)
+ * @property title - 이력 항목 제목
+ * @property category - 이력 카테고리 (`CareerCategory`)
+ * @property descriptions - 항목 설명 문자열 배열
+ * @property note - 부가 설명 텍스트 (선택)
+ * @property link - 외부 링크 URL (선택, `'dev'` 카테고리에서 활성화)
+ */
 type CareerItem = {
   period: string;
   title: string;
@@ -27,7 +52,7 @@ const CATEGORY_STYLE: Record<CareerCategory, string> = {
   etc: 'bg-gray-100 text-gray-500',
 };
 
-// 최신순(최근 경험 → 마지막 경험) 내림차순 정렬
+/** 최신순(최근 경험 → 마지막 경험) 내림차순으로 정렬된 이력 항목 배열 */
 const CAREER_ITEMS: CareerItem[] = [
   {
     period: '2026. 3',
@@ -183,6 +208,13 @@ const CAREER_ITEMS: CareerItem[] = [
   },
 ];
 
+/**
+ * 성장 과정(이력) 페이지 컴포넌트.
+ *
+ * @description
+ * `CAREER_ITEMS` 배열을 타임라인 형태로 렌더링한다.
+ * `'dev'` 카테고리이고 `link` 가 존재하는 항목은 제목에 외부 링크를 적용한다.
+ */
 export default function Career() {
   return (
     <div className="w-full max-w-layout px-10 py-12">

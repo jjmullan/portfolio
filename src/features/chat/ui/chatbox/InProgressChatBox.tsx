@@ -40,9 +40,15 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
   // contextGroupId 또는 companyId 변경 시 소유권 재검증
   useEffect(() => {
     if (!contextGroupId || !companyId) return;
-    validateContextOwnership(contextGroupId, companyId)
-      .then(setIsAuthorized)
-      .catch(() => setIsAuthorized(false));
+    const verify = async () => {
+      try {
+        const result = await validateContextOwnership(contextGroupId, companyId);
+        setIsAuthorized(result);
+      } catch {
+        setIsAuthorized(false);
+      }
+    };
+    verify();
   }, [contextGroupId, companyId]);
 
   // 소유권 불일치 시 입력창 숨김
@@ -65,14 +71,18 @@ export default function InProgressChatBox({ contextGroupId }: InProgressChatBoxT
     await sendMessage({
       messages: [...history, { role: 'user', content: trimmed }],
       onChunk: appendStreamingContent,
-      onDone: (fullResponse) => {
+      onDone: async (fullResponse) => {
         finalizeAssistantMessage();
-        insertContext({
-          // isAuthorized 가 true 인 시점에 contextGroupId 는 반드시 non-null
-          context_group_id: contextGroupId!,
-          input_context: trimmed,
-          output_context: fullResponse,
-        }).catch(console.error);
+        try {
+          await insertContext({
+            // isAuthorized 가 true 인 시점에 contextGroupId 는 반드시 non-null
+            context_group_id: contextGroupId!,
+            input_context: trimmed,
+            output_context: fullResponse,
+          });
+        } catch (error) {
+          console.error(error);
+        }
       },
       onError: (error) => {
         setStreamingContent(error.message);

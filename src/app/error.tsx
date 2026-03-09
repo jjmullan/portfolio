@@ -6,6 +6,16 @@
  * Next.js App Router 의 에러 처리 컴포넌트로, 'use client' 가 필수이며 metadata export 는 동작하지 않는다.
  */
 
+/**
+ * 전역 에러 바운더리 컴포넌트.
+ *
+ * @description
+ * Next.js App Router 의 에러 처리 컴포넌트. `'use client'` 가 필수이며 `metadata` export 는 동작하지 않는다.
+ * 에러 발생 시 사용자 친화적인 안내 메시지와 재시도 버튼을 표시한다.
+ *
+ * @param props.error - 발생한 에러 객체 (Next.js 내부 `digest` 포함 가능)
+ * @param props.reset - 에러 상태를 초기화하고 렌더링을 재시도하는 함수
+ */
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-y-6 w-full max-w-layout px-10 min-h-screen">

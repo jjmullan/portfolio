@@ -1,3 +1,17 @@
+/**
+ * @file loading.tsx
+ * @description 페이지 로딩 중 표시되는 스켈레톤 UI 컴포넌트.
+ * Next.js App Router 가 페이지 전환 시 자동으로 렌더링한다.
+ * `animate-pulse` 로 이력 목록 형태의 스켈레톤을 표시한다.
+ */
+
+/**
+ * 경력 페이지 로딩 스켈레톤 UI 컴포넌트.
+ *
+ * @description
+ * 5개의 이력 항목 형태로 기간, 뱃지, 타이틀, 설명 스켈레톤을 렌더링한다.
+ * `animate-pulse` 로 로딩 상태를 시각적으로 표현한다.
+ */
 export default function Loading() {
   return (
     <div className="w-full max-w-[640px] px-10 py-12 animate-pulse">
