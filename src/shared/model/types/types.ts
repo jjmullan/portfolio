@@ -32,5 +32,5 @@ export type H2Type = {
   isHidden?: boolean;
 };
 
-export const PROMPT_KEYS = ['01_resume', '02_project', '03_cover-letter', '04_career', '05_core-experience'] as const;
+export const PROMPT_KEYS = ['01_resume', '02_project', '03_cover-letter', '04_career', '05_etc-experience'] as const;
 export type PromptType = (typeof PROMPT_KEYS)[number];
