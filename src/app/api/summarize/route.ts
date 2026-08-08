@@ -13,10 +13,13 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-const SUMMARIZE_SYSTEM_PROMPT = `프롬프트를 30자 이내의 한 줄로 요약하세요.
-- 반드시 한국어로 작성
+const SUMMARIZE_SYSTEM_PROMPT = `작성된 프롬프트를 20자 이내로 요약하세요.
+
+# 반드시 지켜야 할 항목
+- 한국어로 응답
 - 핵심 키워드 중심
-- 마침표, 물음표 등 문장 부호 제외`;
+- 문장을 반드시 완성시키기
+- 기호 및 부호 제외`;
 
 /**
  * 텍스트 요약 엔드포인트.
